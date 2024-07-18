@@ -1,9 +1,22 @@
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
+import { SequelizeModule } from "@nestjs/sequelize";
 
 import { BaseModule } from "./modules";
 
 @Module({
-  imports: [ConfigModule.forRoot({ isGlobal: true }), BaseModule],
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
+    SequelizeModule.forRootAsync({
+      useFactory: () => ({
+        uri: process.env.DB_URL,
+        retryAttempts: 2,
+        synchronize: true,
+        // autoLoadModels: true,
+        models: [],
+      }),
+    }),
+    BaseModule,
+  ],
 })
 export class AppModule {}
