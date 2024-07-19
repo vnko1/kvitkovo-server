@@ -1,5 +1,5 @@
-import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/sequelize';
+import { Injectable } from "@nestjs/common";
+import { InjectModel } from "@nestjs/sequelize";
 import {
   CreateOptions,
   DestroyOptions,
@@ -9,12 +9,12 @@ import {
   Optional,
   RestoreOptions,
   UpdateOptions,
-} from 'sequelize';
+} from "sequelize";
 
-import { ScopeType } from 'src/types';
-import { AppService } from 'src/common/services';
+import { ScopeType } from "src/types";
+import { AppService } from "src/common/services";
 
-import { User } from '../models';
+import { User } from "../models";
 
 @Injectable()
 export class UserService extends AppService {
@@ -29,7 +29,7 @@ export class UserService extends AppService {
   createUser<T extends Optional<any, string>>(
     values: T,
     opt?: CreateOptions,
-    scopeOpt?: ScopeType,
+    scopeOpt?: ScopeType
   ) {
     return this.userModel.scope(scopeOpt).create(values, opt);
   }
@@ -41,7 +41,7 @@ export class UserService extends AppService {
   updateUser<T extends Optional<any, string>>(
     values: T,
     opt?: UpdateOptions,
-    scopeOpt?: ScopeType,
+    scopeOpt?: ScopeType
   ) {
     return this.userModel.scope(scopeOpt).update(values, opt);
   }
@@ -59,8 +59,8 @@ export class UserService extends AppService {
   }
 
   findAndCountData(
-    opt?: Omit<FindAndCountOptions<any>, 'group'>,
-    scopeOpt?: ScopeType,
+    opt?: Omit<FindAndCountOptions<any>, "group">,
+    scopeOpt?: ScopeType
   ) {
     return this.userModel.scope(scopeOpt).findAndCountAll(opt);
   }
