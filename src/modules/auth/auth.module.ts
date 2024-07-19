@@ -6,6 +6,8 @@ import { AuthGuard, RolesGuard } from 'src/common/guards';
 
 import { UserModule } from '..';
 
+import { AuthService } from './services';
+
 @Module({
   imports: [
     JwtModule.registerAsync({
@@ -27,6 +29,7 @@ import { UserModule } from '..';
       provide: APP_GUARD,
       useClass: RolesGuard,
     },
+    AuthService,
   ],
   exports: [],
 })

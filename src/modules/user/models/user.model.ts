@@ -29,7 +29,11 @@ const defaultAttribute = [
   'provider',
 ];
 
-const adminAttributes = ['password'];
+const adminAttributes = [
+  'password',
+  'confirmationCode',
+  'confirmationCodeExpiry',
+];
 
 @DefaultScope(() => ({
   attributes: [...defaultAttribute],
@@ -74,6 +78,13 @@ export class User extends Model {
   @Column({ type: DataType.STRING })
   password: string;
 
+  @AllowNull
+  @Column({ type: DataType.STRING })
+  confirmationCode: string | null;
+
+  @Column({ type: DataType.DATE })
+  confirmationCodeExpiry: Date | null;
+
   @Default(false)
   @Column({ type: DataType.BOOLEAN })
   emailConfirmed: boolean;
@@ -96,4 +107,9 @@ export class User extends Model {
     type: DataType.ENUM(StatusEnum.ACTIVE, StatusEnum.INACTIVE),
   })
   status: StatusEnum;
+
+  public setConfirmationCode(code: string) {
+    this.confirmationCode = code;
+    this.confirmationCodeExpiry = new Date(Date.now() + 1000 * 60 * 15);
+  }
 }
