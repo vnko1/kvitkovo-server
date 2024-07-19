@@ -1,5 +1,5 @@
-import { ArgumentsHost, HttpStatus } from '@nestjs/common';
-import { Request } from 'express';
+import { ArgumentsHost, HttpStatus } from "@nestjs/common";
+import { Request } from "express";
 
 export abstract class AppService {
   constructor() {}
@@ -13,7 +13,7 @@ export abstract class AppService {
       type: string,
       message: string,
       status: HttpStatus,
-      description?: string,
+      description?: string
     ) {
       const errorResponse = {
         statusCode: status,
@@ -21,13 +21,13 @@ export abstract class AppService {
         errorType: type,
         errorMessage: message,
       };
-      if (description) errorResponse['data'] = description;
+      if (description) errorResponse["data"] = description;
       return response.status(status).json(errorResponse);
     };
   }
 
   protected extractTokenFromHeader(request: Request): string | undefined {
-    const [type, token] = request.headers.authorization?.split(' ') ?? [];
-    return type === 'Bearer' ? token : undefined;
+    const [type, token] = request.headers.authorization?.split(" ") ?? [];
+    return type === "Bearer" ? token : undefined;
   }
 }

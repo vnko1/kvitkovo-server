@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable } from "@nestjs/common";
 // import { v4 as uuid } from 'uuid';
 
-import { AppService } from 'src/common/services';
+import { AppService } from "src/common/services";
 
-import { UserService } from 'src/modules/user';
+import { UserService } from "src/modules/user";
 
 @Injectable()
 export class AuthService extends AppService {

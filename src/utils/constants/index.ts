@@ -1,1 +1,1 @@
-export * from './template/template.constant';
+export * from "./template/template.constant";

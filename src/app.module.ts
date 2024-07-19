@@ -1,16 +1,16 @@
-import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
-import { SequelizeModule } from '@nestjs/sequelize';
+import { Module } from "@nestjs/common";
+import { ConfigModule } from "@nestjs/config";
+import { SequelizeModule } from "@nestjs/sequelize";
 
-import { User } from './modules/user';
-import { UserModule, AuthModule, TasksModule, MailModule } from './modules';
+import { User } from "./modules/user";
+import { UserModule, AuthModule, TasksModule, MailModule } from "./modules";
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     SequelizeModule.forRootAsync({
       useFactory: () => ({
-        dialect: 'mysql',
+        dialect: "mysql",
         database: process.env.DB_NAME,
         host: process.env.DB_HOST,
         port: +process.env.DB_PORT,

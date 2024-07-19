@@ -1,8 +1,8 @@
-import { Injectable } from '@nestjs/common';
-import { Cron, CronExpression } from '@nestjs/schedule';
-import { Op } from 'sequelize';
+import { Injectable } from "@nestjs/common";
+import { Cron, CronExpression } from "@nestjs/schedule";
+import { Op } from "sequelize";
 
-import { UserService } from 'src/modules/user';
+import { UserService } from "src/modules/user";
 
 @Injectable()
 export class TaskSchedulerService {
@@ -12,7 +12,7 @@ export class TaskSchedulerService {
     const now = new Date();
     await this.userService.updateUser(
       { confirmationCode: null, confirmationCodeExpiry: null },
-      { where: { confirmationCodeExpiry: { [Op.lt]: now } } },
+      { where: { confirmationCodeExpiry: { [Op.lt]: now } } }
     );
   }
 

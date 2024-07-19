@@ -3,21 +3,21 @@ import {
   ExecutionContext,
   Injectable,
   UnauthorizedException,
-} from '@nestjs/common';
-import { Reflector } from '@nestjs/core';
-import { JwtService } from '@nestjs/jwt';
+} from "@nestjs/common";
+import { Reflector } from "@nestjs/core";
+import { JwtService } from "@nestjs/jwt";
 
-import { IS_PUBLIC_KEY } from 'src/common/decorators';
-import { AppService } from 'src/common/services';
+import { IS_PUBLIC_KEY } from "src/common/decorators";
+import { AppService } from "src/common/services";
 
-import { UserService } from 'src/modules/user';
+import { UserService } from "src/modules/user";
 
 @Injectable()
 export class AuthGuard extends AppService implements CanActivate {
   constructor(
     private readonly reflector: Reflector,
     private readonly jwtService: JwtService,
-    private readonly userService: UserService,
+    private readonly userService: UserService
   ) {
     super();
   }
@@ -41,12 +41,12 @@ export class AuthGuard extends AppService implements CanActivate {
       const user = await this.userService.findUserByPK(
         payload.sub,
         undefined,
-        'adminScope',
+        "adminScope"
       );
 
       if (!user) throw new UnauthorizedException();
 
-      req['user'] = user;
+      req["user"] = user;
     } catch (e) {
       throw new UnauthorizedException();
     }

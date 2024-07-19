@@ -5,18 +5,18 @@ import {
   HttpStatus,
   Post,
   UsePipes,
-} from '@nestjs/common';
+} from "@nestjs/common";
 
-import { Public } from 'src/common/decorators';
-import { ValidationPipe } from 'src/common/pipes';
+import { Public } from "src/common/decorators";
+import { ValidationPipe } from "src/common/pipes";
 
-import { RegisterDto, registerSchema } from '../dto';
+import { RegisterDto, registerSchema } from "../dto";
 
-@Controller('auth')
+@Controller("auth")
 export class AuthController {
   @Public()
   @UsePipes(new ValidationPipe(registerSchema))
-  @Post('register')
+  @Post("register")
   @HttpCode(HttpStatus.ACCEPTED)
   async register(@Body() registerDto: RegisterDto) {
     return registerDto;

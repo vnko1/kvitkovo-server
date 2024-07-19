@@ -1,1 +1,1 @@
-export type ScopeType = 'adminScope';
+export type ScopeType = "adminScope";

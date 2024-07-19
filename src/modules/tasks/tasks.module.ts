@@ -1,9 +1,9 @@
-import { Module } from '@nestjs/common';
-import { ScheduleModule } from '@nestjs/schedule';
+import { Module } from "@nestjs/common";
+import { ScheduleModule } from "@nestjs/schedule";
 
-import { UserModule } from '../user/user.module';
+import { UserModule } from "../user/user.module";
 
-import { TaskSchedulerService } from './services';
+import { TaskSchedulerService } from "./services";
 
 @Module({
   imports: [ScheduleModule.forRoot(), UserModule],

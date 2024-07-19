@@ -1,9 +1,9 @@
-import { Module } from '@nestjs/common';
-import { MailerModule } from '@nestjs-modules/mailer';
-import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
+import { Module } from "@nestjs/common";
+import { MailerModule } from "@nestjs-modules/mailer";
+import { HandlebarsAdapter } from "@nestjs-modules/mailer/dist/adapters/handlebars.adapter";
 
-import { getPath } from 'src/utils';
-import { MailService } from './services/mail.service';
+import { getPath } from "src/utils";
+import { MailService } from "./services/mail.service";
 
 @Module({
   imports: [
@@ -11,14 +11,14 @@ import { MailService } from './services/mail.service';
       useFactory: () => {
         const templatesDir = getPath(
           process.cwd(),
-          'src',
-          'modules',
-          'mail',
-          'templates',
+          "src",
+          "modules",
+          "mail",
+          "templates"
         );
         return {
           transport: {
-            service: 'gmail',
+            service: "gmail",
             auth: { user: process.env.MAIL_USER, pass: process.env.MAIL_PASS },
           },
           defaults: {

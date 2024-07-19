@@ -1,1 +1,1 @@
-export * from './scope/scope.type';
+export * from "./scope/scope.type";

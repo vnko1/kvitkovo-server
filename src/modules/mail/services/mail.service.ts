@@ -1,6 +1,6 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { ISendMailOptions, MailerService } from '@nestjs-modules/mailer';
-import { templateContacts, templateIcon, templateUrl } from 'src/utils';
+import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
+import { ISendMailOptions, MailerService } from "@nestjs-modules/mailer";
+import { templateContacts, templateIcon, templateUrl } from "src/utils";
 
 @Injectable()
 export class MailService {
@@ -12,7 +12,7 @@ export class MailService {
     } catch (error) {
       throw new HttpException(
         `Mail service error: ${JSON.stringify(error)}`,
-        HttpStatus.UNPROCESSABLE_ENTITY,
+        HttpStatus.UNPROCESSABLE_ENTITY
       );
     }
   }
@@ -20,8 +20,8 @@ export class MailService {
   mailSendOpt(email: string, confirmationUrl: string) {
     return {
       to: email,
-      subject: 'Confirm your email',
-      template: 'confirmEmail',
+      subject: "Confirm your email",
+      template: "confirmEmail",
       context: {
         confirmationUrl,
         logoUrl: templateIcon.logo,
