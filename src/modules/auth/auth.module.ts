@@ -7,6 +7,7 @@ import { AuthGuard, RolesGuard } from 'src/common/guards';
 import { UserModule } from '..';
 
 import { AuthService } from './services';
+import { AuthController } from './controller';
 
 @Module({
   imports: [
@@ -19,7 +20,7 @@ import { AuthService } from './services';
     }),
     UserModule,
   ],
-  controllers: [],
+  controllers: [AuthController],
   providers: [
     {
       provide: APP_GUARD,
