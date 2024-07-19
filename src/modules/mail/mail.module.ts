@@ -3,7 +3,6 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 
 import { getPath } from 'src/utils';
-
 import { MailService } from './services/mail.service';
 
 @Module({
@@ -18,7 +17,12 @@ import { MailService } from './services/mail.service';
           'templates',
         );
         return {
-          transport: process.env.MAIL_URL,
+          transport: {
+            host: process.env.MAIL_HOST,
+            secure: true,
+            port: 465,
+            auth: { user: process.env.MAIL_USER, pass: process.env.MAIL_PASS },
+          },
           defaults: {
             from: process.env.MAIL_SENDER,
           },
