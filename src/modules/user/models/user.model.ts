@@ -44,7 +44,6 @@ export class User extends Model {
   @Column({ type: DataType.INTEGER })
   userId: number;
 
-  @AllowNull
   @Column({ type: DataType.STRING })
   firstName: string | null;
 
