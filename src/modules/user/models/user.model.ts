@@ -87,7 +87,7 @@ export class User extends Model {
   @Column({
     type: DataType.ENUM(RoleEnum.USER, RoleEnum.ADMIN),
   })
-  role: RoleEnum;
+  roles: RoleEnum;
 
   @Column({ type: DataType.ENUM(ProviderEnum.GOOGLE, ProviderEnum.LOCAL) })
   provider: ProviderEnum;
