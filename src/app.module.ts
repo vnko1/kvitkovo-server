@@ -1,8 +1,9 @@
-import { Module } from "@nestjs/common";
-import { ConfigModule } from "@nestjs/config";
-import { SequelizeModule } from "@nestjs/sequelize";
+import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import { SequelizeModule } from '@nestjs/sequelize';
 
-import { BaseModule } from "./modules";
+import { BaseModule } from './modules';
+import { User } from './modules/user/models';
 
 @Module({
   imports: [
@@ -12,8 +13,8 @@ import { BaseModule } from "./modules";
         uri: process.env.DB_URL,
         retryAttempts: 2,
         synchronize: true,
-        // autoLoadModels: true,
-        models: [],
+        autoLoadModels: true,
+        models: [User],
       }),
     }),
     BaseModule,

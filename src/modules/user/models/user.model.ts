@@ -10,11 +10,33 @@ import {
   Scopes,
   Table,
   Unique,
-} from "sequelize-typescript";
-import { ProviderEnum, RoleEnum, StatusEnum } from "src/types";
+} from 'sequelize-typescript';
+import { ProviderEnum, RoleEnum, StatusEnum } from 'src/types';
 
-@DefaultScope(() => ({}))
-@Scopes(() => ({}))
+const defaultAttribute = [
+  'userId',
+  'firstName',
+  'lastName',
+  'surName',
+  'email',
+  'phone',
+  'birthday',
+  'comment',
+  'status',
+  'emailConfirmed',
+  'newsletter',
+  'role',
+  'provider',
+];
+
+const adminAttributes = ['password'];
+
+@DefaultScope(() => ({
+  attributes: [...defaultAttribute],
+}))
+@Scopes(() => ({
+  adminScope: { attributes: [...defaultAttribute, ...adminAttributes] },
+}))
 @Table
 export class User extends Model {
   @PrimaryKey
@@ -38,9 +60,6 @@ export class User extends Model {
   @Column({ type: DataType.STRING })
   email: string;
 
-  @Column({ type: DataType.ENUM(ProviderEnum.GOOGLE, ProviderEnum.LOCAL) })
-  provider: ProviderEnum;
-
   @AllowNull
   @Column({ type: DataType.STRING })
   phone: string | null;
@@ -61,7 +80,7 @@ export class User extends Model {
     type: DataType.ENUM(
       StatusEnum.ACTIVE,
       StatusEnum.INACTIVE,
-      StatusEnum.DELETED
+      StatusEnum.DELETED,
     ),
   })
   status: StatusEnum;
@@ -79,4 +98,7 @@ export class User extends Model {
     type: DataType.ENUM(RoleEnum.USER, RoleEnum.ADMIN),
   })
   role: RoleEnum;
+
+  @Column({ type: DataType.ENUM(ProviderEnum.GOOGLE, ProviderEnum.LOCAL) })
+  provider: ProviderEnum;
 }

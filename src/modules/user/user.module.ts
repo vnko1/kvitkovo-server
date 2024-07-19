@@ -1,4 +1,10 @@
-import { Module } from "@nestjs/common";
+import { Module } from '@nestjs/common';
+import { SequelizeModule } from '@nestjs/sequelize';
+import { User } from './models';
 
-@Module({ controllers: [], providers: [], exports: [] })
+@Module({
+  imports: [SequelizeModule.forFeature([User])],
+  providers: [],
+  exports: [],
+})
 export class UserModule {}
