@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { SequelizeModule } from '@nestjs/sequelize';
 
-import { BaseModule } from './modules';
+import { UserModule } from './modules';
 import { User } from './modules/user/models';
 
 @Module({
@@ -15,9 +15,15 @@ import { User } from './modules/user/models';
         synchronize: true,
         autoLoadModels: true,
         models: [User],
+        dialectOptions: {
+          ssl: {
+            require: true,
+            rejectUnauthorized: false,
+          },
+        },
       }),
     }),
-    BaseModule,
+    UserModule,
   ],
 })
 export class AppModule {}
