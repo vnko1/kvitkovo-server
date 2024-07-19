@@ -4,7 +4,7 @@ import { JwtModule } from "@nestjs/jwt";
 
 import { AuthGuard, RolesGuard } from "src/common/guards";
 
-import { UserModule } from "..";
+import { MailModule, UserModule } from "..";
 
 import { AuthService } from "./services";
 import { AuthController } from "./controller";
@@ -19,6 +19,7 @@ import { AuthController } from "./controller";
       }),
     }),
     UserModule,
+    MailModule,
   ],
   controllers: [AuthController],
   providers: [

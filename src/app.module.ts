@@ -22,10 +22,10 @@ import { UserModule, AuthModule, TasksModule, MailModule } from "./modules";
         models: [User],
       }),
     }),
+    MailModule,
+    TasksModule,
     UserModule,
     AuthModule,
-    TasksModule,
-    MailModule,
   ],
 })
 export class AppModule {}

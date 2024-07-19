@@ -1,6 +1,8 @@
 import {
   AllowNull,
   AutoIncrement,
+  BeforeCreate,
+  BeforeUpdate,
   Column,
   DataType,
   Default,
@@ -10,29 +12,31 @@ import {
   Scopes,
   Table,
   Unique,
-} from 'sequelize-typescript';
-import { ProviderEnum, RoleEnum, StatusEnum } from 'src/types';
+} from "sequelize-typescript";
+import * as bcrypt from "bcrypt";
+
+import { ProviderEnum, RoleEnum, StatusEnum } from "src/types";
 
 const defaultAttribute = [
-  'userId',
-  'firstName',
-  'lastName',
-  'surName',
-  'email',
-  'phone',
-  'birthday',
-  'comment',
-  'status',
-  'emailConfirmed',
-  'newsletter',
-  'role',
-  'provider',
+  "userId",
+  "firstName",
+  "lastName",
+  "surName",
+  "email",
+  "phone",
+  "birthday",
+  "comment",
+  "status",
+  "emailConfirmed",
+  "newsletter",
+  "role",
+  "provider",
 ];
 
 const adminAttributes = [
-  'password',
-  'confirmationCode',
-  'confirmationCodeExpiry',
+  "password",
+  "confirmationCode",
+  "confirmationCodeExpiry",
 ];
 
 @DefaultScope(() => ({
@@ -77,6 +81,16 @@ export class User extends Model {
 
   @Column({ type: DataType.STRING })
   password: string;
+
+  @BeforeUpdate
+  @BeforeCreate
+  static async hashPassword(instance: User) {
+    if (instance.changed("password")) {
+      const salt = await bcrypt.genSalt();
+      const hashedPass = await bcrypt.hash(instance.password, salt);
+      instance.password = hashedPass;
+    }
+  }
 
   @AllowNull
   @Column({ type: DataType.STRING })
