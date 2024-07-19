@@ -18,9 +18,7 @@ import { MailService } from './services/mail.service';
         );
         return {
           transport: {
-            host: process.env.MAIL_HOST,
-            secure: true,
-            port: 465,
+            service: 'gmail',
             auth: { user: process.env.MAIL_USER, pass: process.env.MAIL_PASS },
           },
           defaults: {
