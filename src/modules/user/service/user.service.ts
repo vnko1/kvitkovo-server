@@ -22,36 +22,28 @@ export class UserService extends AppService {
     super();
   }
 
-  findOrCreateUser(opt: FindOrCreateOptions, scopeOpt?: ScopeType) {
-    return this.userModel.scope(scopeOpt).findOrCreate(opt);
+  findOrCreateUser(opt: FindOrCreateOptions) {
+    return this.userModel.findOrCreate(opt);
   }
 
-  createUser<T extends Optional<any, string>>(
-    values: T,
-    opt?: CreateOptions,
-    scopeOpt?: ScopeType
-  ) {
-    return this.userModel.scope(scopeOpt).create(values, opt);
+  createUser<T extends Optional<any, string>>(values: T, opt?: CreateOptions) {
+    return this.userModel.create(values, opt);
   }
 
-  findUserByPK(pk: string, opt?: FindOptions, scopeOpt?: ScopeType) {
+  findUserByPK(pk: number, opt?: FindOptions, scopeOpt?: ScopeType) {
     return this.userModel.scope(scopeOpt).findByPk(pk, opt);
   }
 
-  updateUser<T extends Optional<any, string>>(
-    values: T,
-    opt?: UpdateOptions,
-    scopeOpt?: ScopeType
-  ) {
-    return this.userModel.scope(scopeOpt).update(values, opt);
+  updateUser<T extends Optional<any, string>>(values: T, opt?: UpdateOptions) {
+    return this.userModel.update(values, opt);
   }
 
   deleteUser(opt: DestroyOptions) {
     return this.userModel.destroy(opt);
   }
 
-  restoreUser(opt: RestoreOptions, scopeOpt?: ScopeType) {
-    return this.userModel.scope(scopeOpt).restore(opt);
+  restoreUser(opt: RestoreOptions) {
+    return this.userModel.restore(opt);
   }
 
   getAllUsers(opt: FindOptions, scopeOpt?: ScopeType) {

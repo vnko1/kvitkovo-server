@@ -15,7 +15,7 @@ import {
 } from "sequelize-typescript";
 import * as bcrypt from "bcrypt";
 
-import { ProviderEnum, RoleEnum, StatusEnum } from "src/types";
+import { ProviderEnum, RolesEnum, StatusEnum } from "src/types";
 
 const defaultAttribute = [
   "userId",
@@ -29,7 +29,7 @@ const defaultAttribute = [
   "status",
   "emailConfirmed",
   "newsletter",
-  "role",
+  "roles",
   "provider",
 ];
 
@@ -79,6 +79,28 @@ export class User extends Model {
   @Column({ type: DataType.STRING })
   comment: string | null;
 
+  @Default(StatusEnum.INACTIVE)
+  @Column({
+    type: DataType.ENUM(StatusEnum.ACTIVE, StatusEnum.INACTIVE),
+  })
+  status: StatusEnum;
+
+  @Default(false)
+  @Column({ type: DataType.BOOLEAN })
+  emailConfirmed: boolean;
+
+  @Default(false)
+  @Column({ type: DataType.BOOLEAN })
+  newsletter: boolean;
+
+  @Column({
+    type: DataType.ENUM(RolesEnum.USER, RolesEnum.ADMIN, RolesEnum.MANAGER),
+  })
+  roles: RolesEnum;
+
+  @Column({ type: DataType.ENUM(ProviderEnum.GOOGLE, ProviderEnum.LOCAL) })
+  provider: ProviderEnum;
+
   @Column({ type: DataType.STRING })
   password: string;
 
@@ -96,31 +118,9 @@ export class User extends Model {
   @Column({ type: DataType.STRING })
   confirmationCode: string | null;
 
+  @AllowNull
   @Column({ type: DataType.DATE })
   confirmationCodeExpiry: Date | null;
-
-  @Default(false)
-  @Column({ type: DataType.BOOLEAN })
-  emailConfirmed: boolean;
-
-  @Default(false)
-  @Column({ type: DataType.BOOLEAN })
-  newsletter: boolean;
-
-  @Default(RoleEnum.USER)
-  @Column({
-    type: DataType.ENUM(RoleEnum.USER, RoleEnum.ADMIN),
-  })
-  roles: RoleEnum;
-
-  @Column({ type: DataType.ENUM(ProviderEnum.GOOGLE, ProviderEnum.LOCAL) })
-  provider: ProviderEnum;
-
-  @Default(StatusEnum.INACTIVE)
-  @Column({
-    type: DataType.ENUM(StatusEnum.ACTIVE, StatusEnum.INACTIVE),
-  })
-  status: StatusEnum;
 
   public setConfirmationCode(code: string) {
     this.confirmationCode = code;
