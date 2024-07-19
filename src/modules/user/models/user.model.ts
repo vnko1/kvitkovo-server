@@ -37,7 +37,7 @@ const adminAttributes = ['password'];
 @Scopes(() => ({
   adminScope: { attributes: [...defaultAttribute, ...adminAttributes] },
 }))
-@Table
+@Table({ paranoid: true })
 export class User extends Model {
   @PrimaryKey
   @AutoIncrement
@@ -75,16 +75,6 @@ export class User extends Model {
   @Column({ type: DataType.STRING })
   password: string;
 
-  @Default(StatusEnum.INACTIVE)
-  @Column({
-    type: DataType.ENUM(
-      StatusEnum.ACTIVE,
-      StatusEnum.INACTIVE,
-      StatusEnum.DELETED,
-    ),
-  })
-  status: StatusEnum;
-
   @Default(false)
   @Column({ type: DataType.BOOLEAN })
   emailConfirmed: boolean;
@@ -101,4 +91,10 @@ export class User extends Model {
 
   @Column({ type: DataType.ENUM(ProviderEnum.GOOGLE, ProviderEnum.LOCAL) })
   provider: ProviderEnum;
+
+  @Default(StatusEnum.INACTIVE)
+  @Column({
+    type: DataType.ENUM(StatusEnum.ACTIVE, StatusEnum.INACTIVE),
+  })
+  status: StatusEnum;
 }
