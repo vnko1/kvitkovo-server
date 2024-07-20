@@ -34,6 +34,10 @@ export class UserService extends AppService {
     return this.userModel.scope(scopeOpt).findByPk(pk, opt);
   }
 
+  findUser(opt?: FindOptions, scopeOpt?: ScopeType) {
+    return this.userModel.scope(scopeOpt).findOne(opt);
+  }
+
   updateUser<T extends Optional<any, string>>(values: T, opt?: UpdateOptions) {
     return this.userModel.update(values, opt);
   }

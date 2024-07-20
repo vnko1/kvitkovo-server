@@ -1,9 +1,8 @@
 import { z } from "zod";
 import { passwordRegex } from "src/utils";
 
-export const registerSchema = z
+export const loginSchema = z
   .object({
-    firstName: z.string({ required_error: "FirstName is required" }),
     email: z
       .string({ required_error: "Email is required" })
       .email("Wrong format"),
@@ -13,4 +12,4 @@ export const registerSchema = z
   })
   .required();
 
-export type RegisterDto = z.infer<typeof registerSchema>;
+export type LoginDto = z.infer<typeof loginSchema>;

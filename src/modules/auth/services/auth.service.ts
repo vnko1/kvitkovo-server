@@ -1,14 +1,20 @@
-import { Injectable } from "@nestjs/common";
+import {
+  ForbiddenException,
+  Injectable,
+  UnauthorizedException,
+} from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
-import { v4 as uuid } from "uuid";
+import { randomUUID } from "crypto";
 
-import { ProviderEnum, RolesEnum } from "src/types";
+import { RolesEnum, StatusEnum } from "src/types";
 import { AppService } from "src/common/services";
 
 import { MailService } from "src/modules/mail";
 import { User, UserService } from "src/modules/user";
 
-import { RegisterDto } from "../dto";
+import { LoginDto, RegisterDto, ResetCodeDto } from "../dto";
+
+type Payload = { sub: number; tokenId?: string };
 
 @Injectable()
 export class AuthService extends AppService {
@@ -25,7 +31,7 @@ export class AuthService extends AppService {
   }
 
   private async sentConfirmCode(user: User) {
-    user.setConfirmationCode(uuid());
+    user.setConfirmationCode(randomUUID());
     await user.save();
     const sentOpt = this.mailService.mailSendOpt(
       user.email,
@@ -34,17 +40,80 @@ export class AuthService extends AppService {
     await this.mailService.sendEmail(sentOpt);
   }
 
-  async register(
-    registerDto: RegisterDto,
-    provider: ProviderEnum = ProviderEnum.LOCAL,
-    roles: RolesEnum = RolesEnum.USER
-  ) {
+  private async generateToken(payload: Payload, expiresIn: string | number) {
+    return await this.jwtService.signAsync(payload, {
+      expiresIn,
+    });
+  }
+
+  private async getCredResponse(payload: Payload) {
+    return {
+      token: await this.generateToken(payload, process.env.JWT_LIFE),
+      userId: payload.sub,
+    };
+  }
+
+  async register(registerDto: RegisterDto, roles: RolesEnum = RolesEnum.USER) {
     const user = await this.userService.createUser({
       ...registerDto,
-      provider,
+      provider: "local",
       roles,
     });
 
-    if (provider === ProviderEnum.LOCAL) await this.sentConfirmCode(user);
+    if (roles === RolesEnum.ADMIN) {
+      user.status = StatusEnum.ACTIVE;
+      await user.save();
+      return await this.getCredResponse({
+        sub: user.userId,
+      });
+    }
+
+    await this.sentConfirmCode(user);
+  }
+
+  async resetCode({ email }: ResetCodeDto) {
+    const user = await this.userService.findUser({ where: { email } });
+
+    if (!user || user.status === StatusEnum.ACTIVE)
+      throw new ForbiddenException();
+
+    return await this.sentConfirmCode(user);
+  }
+
+  async confirmEmail(confirmationCode: string) {
+    const user = await this.userService.findUser({
+      where: { confirmationCode },
+    });
+
+    if (!user || user.status === StatusEnum.ACTIVE)
+      throw new ForbiddenException();
+
+    user.status = StatusEnum.ACTIVE;
+    await user.save();
+
+    return await this.getCredResponse({
+      sub: user.userId,
+    });
+  }
+
+  async login(loginDto: LoginDto) {
+    const user = await this.userService.findUser({
+      where: { email: loginDto.email },
+    });
+
+    if (!user) throw new UnauthorizedException();
+
+    if (user.status === StatusEnum.INACTIVE) throw new ForbiddenException();
+
+    const isValidPass = await this.checkPassword(
+      loginDto.password,
+      user.password
+    );
+
+    if (!isValidPass) throw new UnauthorizedException();
+
+    return await this.getCredResponse({
+      sub: user.userId,
+    });
   }
 }
