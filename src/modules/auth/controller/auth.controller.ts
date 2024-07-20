@@ -14,7 +14,7 @@ import {
 } from "@nestjs/common";
 import { Request, Response } from "express";
 
-import { RolesEnum } from "src/types";
+import { RolesEnum, StatusEnum } from "src/types";
 import { Public } from "src/common/decorators";
 import { ValidationPipe } from "src/common/pipes";
 
@@ -31,8 +31,6 @@ import { GoogleOauthGuard } from "../guards";
 
 @Controller("auth")
 export class AuthController {
-  private static readonly redirectUrl =
-    process.env.CLIENT_URL + process.env.CLIENT_PROFILE;
   private readonly adminCred = process.env.ADMIN_CRED;
   constructor(private readonly authService: AuthService) {}
 
@@ -41,7 +39,11 @@ export class AuthController {
   @Post("admin/register")
   async adminRegister(@Body() registerDto: RegisterDto) {
     if (registerDto.password !== this.adminCred) throw new ForbiddenException();
-    return await this.authService.register(registerDto, RolesEnum.ADMIN);
+    return await this.authService.register(
+      registerDto,
+      RolesEnum.ADMIN,
+      StatusEnum.ACTIVE
+    );
   }
 
   @Public()

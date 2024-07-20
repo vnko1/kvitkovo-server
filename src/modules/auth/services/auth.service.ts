@@ -58,11 +58,16 @@ export class AuthService extends AppService {
     };
   }
 
-  async register(registerDto: RegisterDto, roles: RolesEnum = RolesEnum.USER) {
+  async register(
+    registerDto: RegisterDto,
+    roles: RolesEnum = RolesEnum.USER,
+    status: StatusEnum = StatusEnum.INACTIVE
+  ) {
     const user = await this.userService.createUser({
       ...registerDto,
       provider: "local",
       roles,
+      status,
     });
 
     if (roles === RolesEnum.ADMIN) {
