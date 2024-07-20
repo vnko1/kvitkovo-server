@@ -8,7 +8,7 @@ import {
 
 import { RolesEnum } from "src/types";
 
-import { Roles } from "src/common/decorators";
+import { Roles, UserData } from "src/common/decorators";
 
 import { UsersService } from "../services";
 import { ProfileGuard } from "../guards";
@@ -20,7 +20,10 @@ export class UsersController {
   @UseGuards(ProfileGuard)
   @Roles(RolesEnum.USER, RolesEnum.ADMIN, RolesEnum.MANAGER)
   @Get(":userId")
-  async getUserById(@Param("userId", ParseIntPipe) userId: number) {
-    return await this.usersService.getUser(userId);
+  async getUserById(
+    @Param("userId", ParseIntPipe) userId: number,
+    @UserData("roles") roles: RolesEnum
+  ) {
+    return await this.usersService.getUser(userId, roles);
   }
 }

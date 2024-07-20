@@ -2,6 +2,8 @@ import { ArgumentsHost, HttpStatus } from "@nestjs/common";
 import { Request } from "express";
 import * as bcrypt from "bcrypt";
 
+import { RolesEnum, ScopeType } from "src/types";
+
 export abstract class AppService {
   constructor() {}
 
@@ -34,5 +36,11 @@ export abstract class AppService {
   protected extractTokenFromHeader(request: Request): string | undefined {
     const [type, token] = request.headers.authorization?.split(" ") ?? [];
     return type === "Bearer" ? token : undefined;
+  }
+
+  protected getScopeByRole(role: RolesEnum): ScopeType {
+    if (role === RolesEnum.ADMIN) return "adminScope";
+    if (role === RolesEnum.MANAGER) return "managerScope";
+    return "userScope";
   }
 }

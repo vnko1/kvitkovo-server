@@ -37,6 +37,17 @@ const adminAttributes = [
   "password",
   "confirmationCode",
   "confirmationCodeExpiry",
+  "deletedAt",
+  "createdAt",
+  "updatedAt",
+];
+
+const managerScope = [
+  "confirmationCode",
+  "confirmationCodeExpiry",
+  "deletedAt",
+  "createdAt",
+  "updatedAt",
 ];
 
 @DefaultScope(() => ({
@@ -45,6 +56,7 @@ const adminAttributes = [
 @Scopes(() => ({
   adminScope: { attributes: [...defaultAttribute, ...adminAttributes] },
   userScope: { attributes: defaultAttribute },
+  managerScope: { attributes: [...defaultAttribute, ...managerScope] },
 }))
 @Table({ paranoid: true })
 export class User extends Model {

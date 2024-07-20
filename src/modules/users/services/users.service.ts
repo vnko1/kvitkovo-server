@@ -3,6 +3,7 @@ import { Injectable } from "@nestjs/common";
 import { AppService } from "src/common/services";
 
 import { UserService } from "src/modules/user";
+import { RolesEnum } from "src/types";
 
 @Injectable()
 export class UsersService extends AppService {
@@ -10,7 +11,11 @@ export class UsersService extends AppService {
     super();
   }
 
-  async getUser(userId: number) {
-    return this.userService.findUserByPK(userId, undefined, "userScope");
+  async getUser(userId: number, roles: RolesEnum) {
+    return this.userService.findUserByPK(
+      userId,
+      { paranoid: roles === RolesEnum.USER },
+      this.getScopeByRole(roles)
+    );
   }
 }
