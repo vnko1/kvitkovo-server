@@ -38,7 +38,7 @@ export abstract class AppService {
     return type === "Bearer" ? token : undefined;
   }
 
-  protected getScopeByRole(role: RolesEnum): ScopeType {
+  protected getUserScopeByRole(role: RolesEnum): ScopeType {
     if (role === RolesEnum.ADMIN) return "adminScope";
     if (role === RolesEnum.MANAGER) return "managerScope";
     return "userScope";

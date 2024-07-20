@@ -15,7 +15,11 @@ export class UsersService extends AppService {
     return this.userService.findUserByPK(
       userId,
       { paranoid: roles === RolesEnum.USER },
-      this.getScopeByRole(roles)
+      this.getUserScopeByRole(roles)
     );
+  }
+
+  async deleteUser(userId: number, force = false) {
+    return this.userService.deleteUser({ where: { userId }, force });
   }
 }
