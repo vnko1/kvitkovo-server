@@ -9,6 +9,7 @@ import {
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.setGlobalPrefix("api/v1");
   app.useGlobalFilters(new AppHttpExceptionFilter());
   app.useGlobalInterceptors(new ClearDataInterceptor());
   app.useGlobalInterceptors(new TransformResponseInterceptor());

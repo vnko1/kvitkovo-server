@@ -2,21 +2,30 @@ import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { SequelizeModule } from "@nestjs/sequelize";
 
-import { BaseModule } from "./modules";
+import { User } from "./modules/user";
+import { UserModule, AuthModule, TasksModule, MailModule } from "./modules";
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     SequelizeModule.forRootAsync({
       useFactory: () => ({
-        uri: process.env.DB_URL,
+        dialect: "mysql",
+        database: process.env.DB_NAME,
+        host: process.env.DB_HOST,
+        port: +process.env.DB_PORT,
+        username: process.env.DB_USER,
+        password: process.env.DB_PASSWORD,
         retryAttempts: 2,
         synchronize: true,
-        // autoLoadModels: true,
-        models: [],
+        autoLoadModels: true,
+        models: [User],
       }),
     }),
-    BaseModule,
+    MailModule,
+    TasksModule,
+    UserModule,
+    AuthModule,
   ],
 })
 export class AppModule {}
