@@ -8,6 +8,7 @@ import { MailModule, UserModule } from "..";
 
 import { AuthService } from "./services";
 import { AuthController } from "./controller";
+import { GoogleStrategy } from "./strategies";
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { AuthController } from "./controller";
       useClass: RolesGuard,
     },
     AuthService,
+    GoogleStrategy,
   ],
   exports: [],
 })

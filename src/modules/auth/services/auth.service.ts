@@ -5,16 +5,16 @@ import {
 } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { randomUUID } from "crypto";
+import { generate } from "otp-generator";
 
-import { RolesEnum, StatusEnum } from "src/types";
+import { GoogleProfile, RolesEnum, StatusEnum } from "src/types";
 import { AppService } from "src/common/services";
 
 import { MailService } from "src/modules/mail";
 import { User, UserService } from "src/modules/user";
 
 import { LoginDto, RegisterDto, ResetCodeDto } from "../dto";
-
-type Payload = { sub: number; tokenId?: string };
+import { Payload, TempPassOptions } from "./auth.type";
 
 @Injectable()
 export class AuthService extends AppService {
@@ -26,6 +26,11 @@ export class AuthService extends AppService {
     super();
   }
 
+  private genTempPass(length = 8, options?: TempPassOptions) {
+    const defaultOptions: TempPassOptions = { specialChars: false, ...options };
+    return generate(length, defaultOptions);
+  }
+
   private getConfirmUrl(code: string) {
     return `${process.env.CLIENT_URL}/user/email/${code}/confirm`;
   }
@@ -33,7 +38,7 @@ export class AuthService extends AppService {
   private async sentConfirmCode(user: User) {
     user.setConfirmationCode(randomUUID());
     await user.save();
-    const sentOpt = this.mailService.mailSendOpt(
+    const sentOpt = this.mailService.confirmEmailTemp(
       user.email,
       this.getConfirmUrl(user.confirmationCode)
     );
@@ -115,5 +120,27 @@ export class AuthService extends AppService {
     return await this.getCredResponse({
       sub: user.userId,
     });
+  }
+
+  async googleLogin(googleProfile: GoogleProfile) {
+    const [user] = await this.userService.findOrCreateUser(
+      {
+        where: { email: googleProfile.email },
+        defaults: googleProfile,
+        paranoid: false,
+        isNewRecord: true,
+      },
+      "adminScope"
+    );
+
+    if (user.status === StatusEnum.INACTIVE) user.status = StatusEnum.ACTIVE;
+    if (!user.password) {
+      const tempPass = this.genTempPass();
+      user.password = tempPass;
+      const sentOpt = this.mailService.temporaryPassTemp(user.email, tempPass);
+      await this.mailService.sendEmail(sentOpt);
+    }
+    await user.save();
+    return this.getCredResponse({ sub: user.userId });
   }
 }

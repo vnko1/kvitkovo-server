@@ -7,8 +7,12 @@ import {
   HttpStatus,
   Param,
   Post,
+  Req,
+  Res,
+  UseGuards,
   UsePipes,
 } from "@nestjs/common";
+import { Request, Response } from "express";
 
 import { RolesEnum } from "src/types";
 import { Public } from "src/common/decorators";
@@ -23,9 +27,12 @@ import {
   loginSchema,
 } from "../dto";
 import { AuthService } from "../services";
+import { GoogleOauthGuard } from "../guards";
 
 @Controller("auth")
 export class AuthController {
+  private static readonly redirectUrl =
+    process.env.CLIENT_URL + process.env.CLIENT_PROFILE;
   private readonly adminCred = process.env.ADMIN_CRED;
   constructor(private readonly authService: AuthService) {}
 
@@ -64,5 +71,21 @@ export class AuthController {
   @UsePipes(new ValidationPipe(loginSchema))
   async login(@Body() loginDto: LoginDto) {
     return await this.authService.login(loginDto);
+  }
+
+  @Public()
+  @Get("google/login")
+  @UseGuards(GoogleOauthGuard)
+  async auth() {}
+
+  @Public()
+  @Get("google/callback")
+  @UseGuards(GoogleOauthGuard)
+  async googleOAuthCallBack(@Req() req: Request, @Res() res: Response) {
+    const redirectUrl = `${process.env.CLIENT_URL}${process.env.CLIENT_PROFILE}`;
+    const cred = await this.authService.googleLogin(req["user"]);
+    return res.redirect(
+      `${redirectUrl}?token=${cred.token}&userId=${cred.userId}`
+    );
   }
 }

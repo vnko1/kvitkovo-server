@@ -17,13 +17,33 @@ export class MailService {
     }
   }
 
-  mailSendOpt(email: string, confirmationUrl: string) {
+  confirmEmailTemp(email: string, confirmationUrl: string) {
     return {
       to: email,
-      subject: "Confirm your email",
+      subject: "Підтвердіть свою пошту",
       template: "confirmEmail",
       context: {
         confirmationUrl,
+        logoUrl: templateIcon.logo,
+        facebookUrl: templateUrl.facebook,
+        facebookIcon: templateIcon.facebook,
+        instagramUrl: templateUrl.instagram,
+        instagramIcon: templateIcon.instagram,
+        youtubeUrl: templateUrl.youtube,
+        youtubeIcon: templateIcon.youtube,
+        phone: templateContacts.phone,
+        email: templateContacts.email,
+      },
+    };
+  }
+
+  temporaryPassTemp(email: string, tempPass: string) {
+    return {
+      to: email,
+      subject: "Тимчасовий пароль",
+      template: "tempPass",
+      context: {
+        tempPass,
         logoUrl: templateIcon.logo,
         facebookUrl: templateUrl.facebook,
         facebookIcon: templateIcon.facebook,

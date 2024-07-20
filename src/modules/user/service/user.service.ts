@@ -22,8 +22,8 @@ export class UserService extends AppService {
     super();
   }
 
-  findOrCreateUser(opt: FindOrCreateOptions) {
-    return this.userModel.findOrCreate(opt);
+  findOrCreateUser(opt: FindOrCreateOptions, scopeOpt?: ScopeType) {
+    return this.userModel.scope(scopeOpt).findOrCreate(opt);
   }
 
   createUser<T extends Optional<any, string>>(values: T, opt?: CreateOptions) {
