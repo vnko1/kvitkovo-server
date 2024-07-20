@@ -40,10 +40,11 @@ const adminAttributes = [
 ];
 
 @DefaultScope(() => ({
-  attributes: [...defaultAttribute],
+  attributes: defaultAttribute,
 }))
 @Scopes(() => ({
   adminScope: { attributes: [...defaultAttribute, ...adminAttributes] },
+  userScope: { attributes: defaultAttribute },
 }))
 @Table({ paranoid: true })
 export class User extends Model {

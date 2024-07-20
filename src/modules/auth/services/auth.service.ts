@@ -72,6 +72,7 @@ export class AuthService extends AppService {
 
     if (roles === RolesEnum.ADMIN) {
       user.status = StatusEnum.ACTIVE;
+      user.emailConfirmed = true;
       await user.save();
       return await this.getCredResponse({
         sub: user.userId,
@@ -99,6 +100,7 @@ export class AuthService extends AppService {
       throw new ForbiddenException();
 
     user.status = StatusEnum.ACTIVE;
+    user.emailConfirmed = true;
     await user.save();
 
     return await this.getCredResponse({
@@ -145,6 +147,7 @@ export class AuthService extends AppService {
       const sentOpt = this.mailService.temporaryPassTemp(user.email, tempPass);
       await this.mailService.sendEmail(sentOpt);
     }
+    user.emailConfirmed = true;
     await user.save();
     return this.getCredResponse({ sub: user.userId });
   }

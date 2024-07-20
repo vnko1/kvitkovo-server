@@ -1,20 +1,26 @@
-import { Controller, Get, UseGuards } from "@nestjs/common";
+import {
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  UseGuards,
+} from "@nestjs/common";
 
 import { RolesEnum } from "src/types";
 
 import { Roles } from "src/common/decorators";
-import { ProfileGuard } from "src/common/guards";
 
 import { UsersService } from "../services";
+import { ProfileGuard } from "../guards";
 
 @Controller("users")
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Roles(RolesEnum.USER, RolesEnum.ADMIN)
   @UseGuards(ProfileGuard)
+  @Roles(RolesEnum.USER, RolesEnum.ADMIN, RolesEnum.MANAGER)
   @Get(":userId")
-  async getUserById() {
-    return 1;
+  async getUserById(@Param("userId", ParseIntPipe) userId: number) {
+    return await this.usersService.getUser(userId);
   }
 }

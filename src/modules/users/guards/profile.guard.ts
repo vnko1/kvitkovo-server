@@ -28,17 +28,13 @@ export class ProfileGuard extends AppService implements CanActivate {
     const [key] = Object.keys(req.params);
 
     const isUserRole = requiredRoles.includes(RolesEnum.USER);
-    const user = req.user as User;
+    const user: User = req.user;
+
     if (isUserRole && user.roles === RolesEnum.USER) {
-      const isOwn = user.userId === req.params[key];
+      const isOwn = user.userId === +req.params[key];
       if (!isOwn) throw new ForbiddenException();
     }
 
     return true;
-  }
-
-  private getPropertyKey(key: string) {
-    if (key === "notsId") return "userNots";
-    return "userId";
   }
 }
