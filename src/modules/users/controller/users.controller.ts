@@ -11,6 +11,7 @@ import {
   ParseBoolPipe,
   ParseIntPipe,
   Post,
+  Put,
   Query,
   UseGuards,
   UsePipes,
@@ -33,6 +34,7 @@ import {
   createUserSchema,
   emailSchema,
 } from "../dto";
+import { UpdateUserDto, updateUserSchema } from "../dto/updateUser.dto";
 
 @Controller("users")
 export class UsersController {
@@ -142,15 +144,25 @@ export class UsersController {
   }
 
   @Post("change-pass")
+  @UsePipes(new ValidationPipe(changePasswordSchema))
   @HttpCode(HttpStatus.NO_CONTENT)
   async changePassword(
     @UserData("userId") userId: number,
     @Body() changePasswordDto: ChangePasswordDto
   ) {
-    const parsedSchema = changePasswordSchema.safeParse(changePasswordDto);
-    if (!parsedSchema.success)
-      throw new BadRequestException(parsedSchema.error.errors[0].message);
+    return await this.usersService.changePassword(userId, changePasswordDto);
+  }
 
-    return await this.usersService.changePassword(userId, parsedSchema.data);
+  @Put("user/:userId")
+  @Roles(RolesEnum.USER, RolesEnum.ADMIN, RolesEnum.MANAGER)
+  @Rights(RolesEnum.USER, RolesEnum.MANAGER)
+  @UseGuards(ProfileGuard)
+  @UsePipes(new ValidationPipe(updateUserSchema))
+  async updateUser(
+    @Param("userId", ParseIntPipe) userId: number,
+    @Body() updateUserDto: UpdateUserDto,
+    @UserData("roles") roles: RolesEnum
+  ) {
+    return await this.usersService.updateUser(userId, updateUserDto, roles);
   }
 }

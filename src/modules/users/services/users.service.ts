@@ -13,6 +13,7 @@ import {
   ChangeResetPasswordDto,
   CreateUserDto,
 } from "../dto";
+import { UpdateUserDto } from "../dto/updateUser.dto";
 
 @Injectable()
 export class UsersService extends AppService {
@@ -101,6 +102,23 @@ export class UsersService extends AppService {
   async changePassword(userId: number, changePassword: ChangePasswordDto) {
     const user = await this.userService.findUserByPK(userId);
     user.password = changePassword.password;
+    return await user.save();
+  }
+
+  async updateUser(
+    userId: number,
+    updateUserDto: UpdateUserDto,
+    roles: RolesEnum
+  ) {
+    const user = await this.userService.findUserByPK(
+      userId,
+      { paranoid: roles === RolesEnum.USER },
+      this.getUserScopeByRole(roles)
+    );
+
+    Object.keys(updateUserDto).forEach(
+      (data) => (user[data] = updateUserDto[data])
+    );
     return await user.save();
   }
 }
