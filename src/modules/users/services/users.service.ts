@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { ForbiddenException, Injectable } from "@nestjs/common";
 
 import { AppService } from "src/common/services";
 
@@ -12,11 +12,16 @@ export class UsersService extends AppService {
   }
 
   async getUser(userId: number, roles: RolesEnum) {
-    return this.userService.findUserByPK(
+    const user = await this.userService.findUserByPK(
       userId,
       { paranoid: roles === RolesEnum.USER },
       this.getUserScopeByRole(roles)
     );
+
+    if (roles === RolesEnum.MANAGER && user.roles === RolesEnum.ADMIN)
+      throw new ForbiddenException();
+
+    return user;
   }
 
   async deleteUser(userId: number, force = false) {

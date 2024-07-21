@@ -16,7 +16,7 @@ import {
 import { paginationDefaultValues } from "src/utils";
 import { RolesEnum } from "src/types";
 
-import { Roles, UserData } from "src/common/decorators";
+import { Roles, User } from "src/common/decorators";
 
 import { UsersService } from "../services";
 import { ProfileGuard } from "../guards";
@@ -30,7 +30,7 @@ export class UsersController {
   @Get("user/:userId")
   async getUserById(
     @Param("userId", ParseIntPipe) userId: number,
-    @UserData("roles") roles: RolesEnum
+    @User("roles") roles: RolesEnum
   ) {
     return await this.usersService.getUser(userId, roles);
   }
@@ -43,7 +43,7 @@ export class UsersController {
     @Param("userId", ParseIntPipe) userId: number,
     @Query("forceDelete", new DefaultValuePipe(false), ParseBoolPipe)
     force: boolean,
-    @UserData("roles") roles: RolesEnum
+    @User("roles") roles: RolesEnum
   ) {
     const forceDelete = roles === RolesEnum.ADMIN && force;
     return await this.usersService.deleteUser(userId, forceDelete);
@@ -64,7 +64,7 @@ export class UsersController {
       ParseIntPipe
     )
     limit: number,
-    @UserData("roles") roles: RolesEnum
+    @User("roles") roles: RolesEnum
   ) {
     return await this.usersService.findUsers(
       RolesEnum.MANAGER,
@@ -89,7 +89,7 @@ export class UsersController {
       ParseIntPipe
     )
     limit: number,
-    @UserData("roles") roles: RolesEnum
+    @User("roles") roles: RolesEnum
   ) {
     return await this.usersService.findUsers(
       RolesEnum.USER,

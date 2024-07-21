@@ -1,39 +1,23 @@
-import {
-  CanActivate,
-  ExecutionContext,
-  ForbiddenException,
-  Injectable,
-} from "@nestjs/common";
-import { Reflector } from "@nestjs/core";
+import { CanActivate, ExecutionContext, Injectable } from "@nestjs/common";
 
 import { RolesEnum } from "src/types";
 
-import { ROLES_KEY } from "src/common/decorators";
 import { AppService } from "src/common/services";
 
 import { User } from "src/modules/user";
 
 @Injectable()
 export class ProfileGuard extends AppService implements CanActivate {
-  constructor(private reflector: Reflector) {
+  constructor() {
     super();
   }
   async canActivate(ctx: ExecutionContext): Promise<boolean> {
-    const requiredRoles = this.reflector.getAllAndOverride<RolesEnum[]>(
-      ROLES_KEY,
-      [ctx.getHandler(), ctx.getClass()]
-    );
-
     const req = ctx.switchToHttp().getRequest();
     const [key] = Object.keys(req.params);
 
-    const isUserRole = requiredRoles.includes(RolesEnum.USER);
     const user: User = req.user;
 
-    if (isUserRole && user.roles === RolesEnum.USER) {
-      const isOwn = user.userId === +req.params[key];
-      if (!isOwn) throw new ForbiddenException();
-    }
+    if (user.roles === RolesEnum.USER) return user.userId === +req.params[key];
 
     return true;
   }

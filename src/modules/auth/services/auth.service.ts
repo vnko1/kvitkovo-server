@@ -115,7 +115,10 @@ export class AuthService extends AppService {
 
     if (!user) throw new UnauthorizedException();
 
-    if (user.status === StatusEnum.INACTIVE || !user.emailConfirmed)
+    if (
+      user.roles !== RolesEnum.ADMIN &&
+      (user.status === StatusEnum.INACTIVE || !user.emailConfirmed)
+    )
       throw new ForbiddenException();
 
     const isValidPass = await this.checkPassword(
