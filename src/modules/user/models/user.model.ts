@@ -3,6 +3,7 @@ import {
   AutoIncrement,
   BeforeCreate,
   BeforeUpdate,
+  BeforeValidate,
   Column,
   DataType,
   Default,
@@ -35,16 +36,16 @@ const defaultAttribute = [
 
 const adminAttributes = [
   "password",
-  "confirmationCode",
-  "confirmationCodeExpiry",
+  "verificationCode",
+  "verificationCodeExpiry",
   "deletedAt",
   "createdAt",
   "updatedAt",
 ];
 
 const managerScope = [
-  "confirmationCode",
-  "confirmationCodeExpiry",
+  "verificationCode",
+  "verificationCodeExpiry",
   "deletedAt",
   "createdAt",
   "updatedAt",
@@ -119,6 +120,7 @@ export class User extends Model {
 
   @BeforeUpdate
   @BeforeCreate
+  @BeforeValidate
   static async hashPassword(instance: User) {
     if (instance.changed("password")) {
       const salt = await bcrypt.genSalt();
@@ -129,14 +131,14 @@ export class User extends Model {
 
   @AllowNull
   @Column({ type: DataType.STRING })
-  confirmationCode: string | null;
+  verificationCode: string | null;
 
   @AllowNull
   @Column({ type: DataType.DATE })
-  confirmationCodeExpiry: Date | null;
+  verificationCodeExpiry: Date | null;
 
-  public setConfirmationCode(code: string) {
-    this.confirmationCode = code;
-    this.confirmationCodeExpiry = new Date(Date.now() + 1000 * 60 * 15);
+  public setVerificationCode(code: string) {
+    this.verificationCode = code;
+    this.verificationCodeExpiry = new Date(Date.now() + 1000 * 60 * 15);
   }
 }

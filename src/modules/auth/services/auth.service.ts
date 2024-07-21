@@ -30,11 +30,11 @@ export class AuthService extends AppService {
   }
 
   private async sentConfirmCode(user: User) {
-    user.setConfirmationCode(randomUUID());
+    user.setVerificationCode(randomUUID());
     await user.save();
     const sentOpt = this.mailService.confirmEmailTemp(
       user.email,
-      this.getConfirmUrl(user.confirmationCode)
+      this.getConfirmUrl(user.verificationCode)
     );
     await this.mailService.sendEmail(sentOpt);
   }
@@ -85,9 +85,9 @@ export class AuthService extends AppService {
     return await this.sentConfirmCode(user);
   }
 
-  async confirmEmail(confirmationCode: string) {
+  async confirmEmail(verificationCode: string) {
     const user = await this.userService.findUser({
-      where: { confirmationCode },
+      where: { verificationCode },
     });
 
     if (!user || user.status === StatusEnum.ACTIVE || user.emailConfirmed)

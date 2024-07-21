@@ -63,9 +63,9 @@ export class AuthController {
   }
 
   @Public()
-  @Get("email/confirm/:confirmationCode")
-  async confirmCode(@Param("confirmationCode") confirmationCode: string) {
-    return await this.authService.confirmEmail(confirmationCode);
+  @Get("email/confirm/:verificationCode")
+  async confirmCode(@Param("verificationCode") verificationCode: string) {
+    return await this.authService.confirmEmail(verificationCode);
   }
 
   @Public()

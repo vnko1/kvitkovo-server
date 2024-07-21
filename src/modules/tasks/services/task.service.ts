@@ -9,17 +9,17 @@ import { UserService } from "src/modules/user";
 export class TaskSchedulerService {
   constructor(private readonly userService: UserService) {}
 
-  private async clearExpiredConfirmationCode(): Promise<void> {
+  private async clearExpiredVerificationCode(): Promise<void> {
     const now = new Date();
     await this.userService.updateUser(
-      { confirmationCode: null, confirmationCodeExpiry: null },
-      { where: { confirmationCodeExpiry: { [Op.lt]: now } } }
+      { verificationCode: null, verificationCodeExpiry: null },
+      { where: { verificationCodeExpiry: { [Op.lt]: now } } }
     );
   }
 
   @Cron(CronExpression.EVERY_10_MINUTES)
   async handleCron() {
-    await this.clearExpiredConfirmationCode();
+    await this.clearExpiredVerificationCode();
   }
 
   @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)

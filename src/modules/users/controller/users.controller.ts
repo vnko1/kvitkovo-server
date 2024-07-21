@@ -24,7 +24,13 @@ import { ValidationPipe } from "src/common/pipes";
 
 import { UsersService } from "../services";
 import { ProfileGuard } from "../guards";
-import { CreateUserDto, createUserSchema, emailSchema } from "../dto";
+import {
+  ChangeResetPasswordDto,
+  changeResetPasswordSchema,
+  CreateUserDto,
+  createUserSchema,
+  emailSchema,
+} from "../dto";
 
 @Controller("users")
 export class UsersController {
@@ -112,7 +118,7 @@ export class UsersController {
   }
 
   @Post("reset-pass/:email")
-  // @HttpCode(HttpStatus.NO_CONTENT)
+  @HttpCode(HttpStatus.NO_CONTENT)
   async resetPass(@Param("email") email: string) {
     const isValidEmail = emailSchema.safeParse(email);
 
@@ -121,5 +127,14 @@ export class UsersController {
     }
 
     return await this.usersService.resetPass(isValidEmail.data);
+  }
+
+  @UsePipes(new ValidationPipe(changeResetPasswordSchema))
+  @Post("reset-pass")
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async updateResetPassword(
+    @Body() changeResetPasswordDto: ChangeResetPasswordDto
+  ) {
+    return await this.usersService.changeResetPassword(changeResetPasswordDto);
   }
 }

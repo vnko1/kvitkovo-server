@@ -7,7 +7,8 @@ import { AppService } from "src/common/services";
 import { MailService } from "src/modules/mail";
 import { UserService } from "src/modules/user";
 
-import { CreateUserDto } from "../dto";
+import { ChangeResetPasswordDto, CreateUserDto } from "../dto";
+import { randomUUID } from "crypto";
 
 @Injectable()
 export class UsersService extends AppService {
@@ -16,6 +17,10 @@ export class UsersService extends AppService {
     private readonly mailService: MailService
   ) {
     super();
+  }
+
+  private getConfirmUrl(code: string) {
+    return `${process.env.CLIENT_URL}/user/reset-password/${code}`;
   }
 
   async getUser(userId: number, roles: RolesEnum) {
@@ -66,6 +71,26 @@ export class UsersService extends AppService {
 
   async resetPass(email: string) {
     const user = await this.userService.findUser({ where: { email } });
+    user.setVerificationCode(randomUUID());
+    await user.save();
+
+    const sentOpt = this.mailService.resetPassTemp(
+      user.email,
+      this.getConfirmUrl(user.verificationCode)
+    );
+    return await this.mailService.sendEmail(sentOpt);
+  }
+
+  async changeResetPassword(changeResetPasswordDto: ChangeResetPasswordDto) {
+    const user = await this.userService.updateUser(
+      {
+        password: changeResetPasswordDto.password,
+      },
+      { where: { verificationCode: changeResetPasswordDto.verificationCode } }
+    );
+
+    if (!user[0]) throw new ForbiddenException();
+
     return user;
   }
 }
