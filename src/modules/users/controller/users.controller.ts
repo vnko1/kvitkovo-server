@@ -1,22 +1,25 @@
 import {
-  Body,
+  // Body,
   Controller,
+  DefaultValuePipe,
   Delete,
   Get,
   HttpCode,
   HttpStatus,
   Param,
+  ParseBoolPipe,
   ParseIntPipe,
+  Query,
   UseGuards,
 } from "@nestjs/common";
 
+import { paginationDefaultValues } from "src/utils";
 import { RolesEnum } from "src/types";
 
 import { Roles, UserData } from "src/common/decorators";
 
 import { UsersService } from "../services";
 import { ProfileGuard } from "../guards";
-import { DeleteUserDto, deleteUserSchema } from "../dto";
 
 @Controller("users")
 export class UsersController {
@@ -24,7 +27,7 @@ export class UsersController {
 
   @UseGuards(ProfileGuard)
   @Roles(RolesEnum.USER, RolesEnum.ADMIN, RolesEnum.MANAGER)
-  @Get(":userId")
+  @Get("user/:userId")
   async getUserById(
     @Param("userId", ParseIntPipe) userId: number,
     @UserData("roles") roles: RolesEnum
@@ -32,21 +35,67 @@ export class UsersController {
     return await this.usersService.getUser(userId, roles);
   }
 
-  @UseGuards(ProfileGuard)
   @Roles(RolesEnum.USER, RolesEnum.ADMIN)
-  @Delete(":userId")
+  @UseGuards(ProfileGuard)
+  @Delete("user/:userId")
   @HttpCode(HttpStatus.NO_CONTENT)
   async deleteUserById(
     @Param("userId", ParseIntPipe) userId: number,
-    @Body() deleteUserDto: DeleteUserDto,
+    @Query("forceDelete", new DefaultValuePipe(false), ParseBoolPipe)
+    force: boolean,
     @UserData("roles") roles: RolesEnum
   ) {
-    const parsedSchema = deleteUserSchema.safeParse(deleteUserDto);
-
-    const forceDelete =
-      roles === RolesEnum.ADMIN &&
-      parsedSchema.success &&
-      deleteUserDto.forceDelete;
+    const forceDelete = roles === RolesEnum.ADMIN && force;
     return await this.usersService.deleteUser(userId, forceDelete);
+  }
+
+  @Roles(RolesEnum.MANAGER, RolesEnum.ADMIN)
+  @Get("employees")
+  async getEmployees(
+    @Query(
+      "offset",
+      new DefaultValuePipe(paginationDefaultValues.offset),
+      ParseIntPipe
+    )
+    offset: number,
+    @Query(
+      "limit",
+      new DefaultValuePipe(paginationDefaultValues.limit),
+      ParseIntPipe
+    )
+    limit: number,
+    @UserData("roles") roles: RolesEnum
+  ) {
+    return await this.usersService.findUsers(
+      RolesEnum.MANAGER,
+      offset,
+      limit,
+      roles
+    );
+  }
+
+  @Roles(RolesEnum.MANAGER, RolesEnum.ADMIN)
+  @Get("clients")
+  async getUsers(
+    @Query(
+      "offset",
+      new DefaultValuePipe(paginationDefaultValues.offset),
+      ParseIntPipe
+    )
+    offset: number,
+    @Query(
+      "limit",
+      new DefaultValuePipe(paginationDefaultValues.limit),
+      ParseIntPipe
+    )
+    limit: number,
+    @UserData("roles") roles: RolesEnum
+  ) {
+    return await this.usersService.findUsers(
+      RolesEnum.USER,
+      offset,
+      limit,
+      roles
+    );
   }
 }

@@ -96,7 +96,7 @@ export class AuthService extends AppService {
       where: { confirmationCode },
     });
 
-    if (!user || user.status === StatusEnum.ACTIVE)
+    if (!user || user.status === StatusEnum.ACTIVE || user.emailConfirmed)
       throw new ForbiddenException();
 
     user.status = StatusEnum.ACTIVE;
@@ -115,7 +115,8 @@ export class AuthService extends AppService {
 
     if (!user) throw new UnauthorizedException();
 
-    if (user.status === StatusEnum.INACTIVE) throw new ForbiddenException();
+    if (user.status === StatusEnum.INACTIVE || !user.emailConfirmed)
+      throw new ForbiddenException();
 
     const isValidPass = await this.checkPassword(
       loginDto.password,

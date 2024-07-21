@@ -22,4 +22,21 @@ export class UsersService extends AppService {
   async deleteUser(userId: number, force = false) {
     return this.userService.deleteUser({ where: { userId }, force });
   }
+
+  async findUsers(
+    searchRoles: RolesEnum,
+    offset: number,
+    limit: number,
+    roles: RolesEnum
+  ) {
+    return this.userService.findAndCountData(
+      {
+        where: { roles: searchRoles },
+        offset,
+        limit,
+        paranoid: true,
+      },
+      this.getUserScopeByRole(roles)
+    );
+  }
 }
