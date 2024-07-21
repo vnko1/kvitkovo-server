@@ -62,7 +62,6 @@ export class User extends Model {
   @BeforeValidate
   static async hashPassword(instance: User) {
     if (instance.changed("password")) {
-      console.log("🚀 ~ User ~ hashPassword ~ instance:", instance.password);
       const salt = await bcrypt.genSalt();
       const hashedPass = await bcrypt.hash(instance.password, salt);
       instance.password = hashedPass;
