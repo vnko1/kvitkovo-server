@@ -17,13 +17,13 @@ export class MailService {
     }
   }
 
-  confirmEmailTemp(email: string, confirmationUrl: string) {
+  confirmEmailTemp(email: string, verificationUrl: string) {
     return {
       to: email,
       subject: "Підтвердіть свою пошту",
       template: "confirmEmail",
       context: {
-        confirmationUrl,
+        verificationUrl,
         logoUrl: templateIcon.logo,
         facebookUrl: templateUrl.facebook,
         facebookIcon: templateIcon.facebook,

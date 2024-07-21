@@ -58,7 +58,7 @@ export class AuthController {
   @Get("confirm/reset")
   @UsePipes(new ValidationPipe(resetCodeSchema))
   @HttpCode(HttpStatus.NO_CONTENT)
-  async resetConfirmationCode(@Body() resetCodeDto: ResetCodeDto) {
+  async resetVerificationCode(@Body() resetCodeDto: ResetCodeDto) {
     return await this.authService.resetCode(resetCodeDto);
   }
 
