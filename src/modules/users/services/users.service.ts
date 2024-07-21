@@ -12,6 +12,7 @@ import {
   ChangePasswordDto,
   ChangeResetPasswordDto,
   CreateUserDto,
+  UpdateEmployeesDto,
 } from "../dto";
 import { UpdateUserDto } from "../dto/updateUser.dto";
 
@@ -107,14 +108,18 @@ export class UsersService extends AppService {
 
   async updateUser(
     userId: number,
-    updateUserDto: UpdateUserDto,
-    roles: RolesEnum
+    updateUserDto: UpdateUserDto | UpdateEmployeesDto,
+    roles: RolesEnum,
+    onlyEmployees?: boolean
   ) {
     const user = await this.userService.findUserByPK(
       userId,
       { paranoid: roles === RolesEnum.USER },
       this.getUserScopeByRole(roles)
     );
+
+    if (onlyEmployees && user.roles === RolesEnum.USER)
+      throw new ForbiddenException();
 
     Object.keys(updateUserDto).forEach(
       (data) => (user[data] = updateUserDto[data])

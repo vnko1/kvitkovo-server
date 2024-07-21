@@ -33,8 +33,11 @@ import {
   CreateUserDto,
   createUserSchema,
   emailSchema,
+  UpdateEmployeesDto,
+  updateEmployeesSchema,
+  UpdateUserDto,
+  updateUserSchema,
 } from "../dto";
-import { UpdateUserDto, updateUserSchema } from "../dto/updateUser.dto";
 
 @Controller("users")
 export class UsersController {
@@ -164,5 +167,23 @@ export class UsersController {
     @UserData("roles") roles: RolesEnum
   ) {
     return await this.usersService.updateUser(userId, updateUserDto, roles);
+  }
+
+  @Put("employees/:userId")
+  @Roles(RolesEnum.ADMIN, RolesEnum.MANAGER)
+  @Rights(RolesEnum.MANAGER)
+  @UseGuards(ProfileGuard)
+  @UsePipes(new ValidationPipe(updateEmployeesSchema))
+  async updateEmployees(
+    @Param("userId", ParseIntPipe) userId: number,
+    @Body() updateEmployeesDto: UpdateEmployeesDto,
+    @UserData("roles") roles: RolesEnum
+  ) {
+    return await this.usersService.updateUser(
+      userId,
+      updateEmployeesDto,
+      roles,
+      true
+    );
   }
 }
