@@ -19,7 +19,7 @@ import {
 import { paginationDefaultValues } from "src/utils";
 import { RolesEnum } from "src/types";
 
-import { Roles, UserData } from "src/common/decorators";
+import { Rights, Roles, UserData } from "src/common/decorators";
 import { ValidationPipe } from "src/common/pipes";
 
 import { UsersService } from "../services";
@@ -40,6 +40,7 @@ export class UsersController {
 
   @Get("user/:userId")
   @Roles(RolesEnum.USER, RolesEnum.ADMIN, RolesEnum.MANAGER)
+  @Rights(RolesEnum.USER)
   @UseGuards(ProfileGuard)
   async getUserById(
     @Param("userId", ParseIntPipe) userId: number,
@@ -50,6 +51,7 @@ export class UsersController {
 
   @Delete("user/:userId")
   @Roles(RolesEnum.USER, RolesEnum.ADMIN)
+  @Rights(RolesEnum.USER)
   @UseGuards(ProfileGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   async deleteUserById(
