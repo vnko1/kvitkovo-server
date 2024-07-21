@@ -1,6 +1,11 @@
 import { ArgumentsHost, HttpStatus } from "@nestjs/common";
 import { Request } from "express";
 import * as bcrypt from "bcrypt";
+import { generate } from "otp-generator";
+
+import { RolesEnum, ScopeType } from "src/types";
+
+import { TempPassOptions } from "./app.type";
 
 export abstract class AppService {
   constructor() {}
@@ -34,5 +39,16 @@ export abstract class AppService {
   protected extractTokenFromHeader(request: Request): string | undefined {
     const [type, token] = request.headers.authorization?.split(" ") ?? [];
     return type === "Bearer" ? token : undefined;
+  }
+
+  protected getUserScopeByRole(role: RolesEnum): ScopeType {
+    if (role === RolesEnum.ADMIN) return "adminScope";
+    if (role === RolesEnum.MANAGER) return "managerScope";
+    return "userScope";
+  }
+
+  protected genTempPass(length = 8, options?: TempPassOptions) {
+    const defaultOptions: TempPassOptions = { specialChars: false, ...options };
+    return generate(length, defaultOptions);
   }
 }

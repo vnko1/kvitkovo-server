@@ -17,13 +17,13 @@ export class MailService {
     }
   }
 
-  confirmEmailTemp(email: string, confirmationUrl: string) {
+  confirmEmailTemp(email: string, verificationUrl: string) {
     return {
       to: email,
       subject: "Підтвердіть свою пошту",
       template: "confirmEmail",
       context: {
-        confirmationUrl,
+        verificationUrl,
         logoUrl: templateIcon.logo,
         facebookUrl: templateUrl.facebook,
         facebookIcon: templateIcon.facebook,
@@ -44,6 +44,26 @@ export class MailService {
       template: "tempPass",
       context: {
         tempPass,
+        logoUrl: templateIcon.logo,
+        facebookUrl: templateUrl.facebook,
+        facebookIcon: templateIcon.facebook,
+        instagramUrl: templateUrl.instagram,
+        instagramIcon: templateIcon.instagram,
+        youtubeUrl: templateUrl.youtube,
+        youtubeIcon: templateIcon.youtube,
+        phone: templateContacts.phone,
+        email: templateContacts.email,
+      },
+    };
+  }
+
+  resetPassTemp(email: string, resetPassUrl: string) {
+    return {
+      to: email,
+      subject: "Запит на зміну паролю",
+      template: "resetPass",
+      context: {
+        resetPassUrl,
         logoUrl: templateIcon.logo,
         facebookUrl: templateUrl.facebook,
         facebookIcon: templateIcon.facebook,

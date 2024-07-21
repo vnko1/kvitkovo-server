@@ -2,7 +2,7 @@ import { Module } from "@nestjs/common";
 import { APP_GUARD } from "@nestjs/core";
 import { JwtModule } from "@nestjs/jwt";
 
-import { AuthGuard, RolesGuard } from "src/common/guards";
+import { AuthGuard, RolesGuard, StatusGuard } from "src/common/guards";
 
 import { MailModule, UserModule } from "..";
 
@@ -28,6 +28,7 @@ import { GoogleStrategy } from "./strategies";
       provide: APP_GUARD,
       useClass: AuthGuard,
     },
+    { provide: APP_GUARD, useClass: StatusGuard },
     {
       provide: APP_GUARD,
       useClass: RolesGuard,

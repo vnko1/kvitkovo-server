@@ -31,6 +31,7 @@ export class AuthGuard extends AppService implements CanActivate {
     const req = ctx.switchToHttp().getRequest();
 
     const token = this.extractTokenFromHeader(req);
+
     if (!token) throw new UnauthorizedException();
 
     try {

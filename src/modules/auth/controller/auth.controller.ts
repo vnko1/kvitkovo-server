@@ -14,7 +14,7 @@ import {
 } from "@nestjs/common";
 import { Request, Response } from "express";
 
-import { RolesEnum } from "src/types";
+import { RolesEnum, StatusEnum } from "src/types";
 import { Public } from "src/common/decorators";
 import { ValidationPipe } from "src/common/pipes";
 
@@ -31,55 +31,57 @@ import { GoogleOauthGuard } from "../guards";
 
 @Controller("auth")
 export class AuthController {
-  private static readonly redirectUrl =
-    process.env.CLIENT_URL + process.env.CLIENT_PROFILE;
   private readonly adminCred = process.env.ADMIN_CRED;
   constructor(private readonly authService: AuthService) {}
 
+  @Post("admin/register")
   @Public()
   @UsePipes(new ValidationPipe(registerSchema))
-  @Post("admin/register")
   async adminRegister(@Body() registerDto: RegisterDto) {
     if (registerDto.password !== this.adminCred) throw new ForbiddenException();
-    return await this.authService.register(registerDto, RolesEnum.ADMIN);
+    return await this.authService.register(
+      registerDto,
+      RolesEnum.ADMIN,
+      StatusEnum.ACTIVE
+    );
   }
 
+  @Post("register")
   @Public()
   @UsePipes(new ValidationPipe(registerSchema))
-  @Post("register")
   @HttpCode(HttpStatus.NO_CONTENT)
   async register(@Body() registerDto: RegisterDto) {
     return await this.authService.register(registerDto);
   }
 
-  @Public()
   @Get("confirm/reset")
+  @Public()
   @UsePipes(new ValidationPipe(resetCodeSchema))
   @HttpCode(HttpStatus.NO_CONTENT)
-  async resetConfirmationCode(@Body() resetCodeDto: ResetCodeDto) {
+  async resetVerificationCode(@Body() resetCodeDto: ResetCodeDto) {
     return await this.authService.resetCode(resetCodeDto);
   }
 
+  @Get("email/confirm/:verificationCode")
   @Public()
-  @Get("email/confirm/:confirmationCode")
-  async confirmCode(@Param("confirmationCode") confirmationCode: string) {
-    return await this.authService.confirmEmail(confirmationCode);
+  async confirmCode(@Param("verificationCode") verificationCode: string) {
+    return await this.authService.confirmEmail(verificationCode);
   }
 
-  @Public()
   @Post("login")
+  @Public()
   @UsePipes(new ValidationPipe(loginSchema))
   async login(@Body() loginDto: LoginDto) {
     return await this.authService.login(loginDto);
   }
 
-  @Public()
   @Get("google/login")
+  @Public()
   @UseGuards(GoogleOauthGuard)
   async auth() {}
 
-  @Public()
   @Get("google/callback")
+  @Public()
   @UseGuards(GoogleOauthGuard)
   async googleOAuthCallBack(@Req() req: Request, @Res() res: Response) {
     const redirectUrl = `${process.env.CLIENT_URL}${process.env.CLIENT_PROFILE}`;

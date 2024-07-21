@@ -35,18 +35,41 @@ const defaultAttribute = [
 
 const adminAttributes = [
   "password",
-  "confirmationCode",
-  "confirmationCodeExpiry",
+  "verificationCode",
+  "verificationCodeExpiry",
+  "deletedAt",
+  "createdAt",
+  "updatedAt",
+];
+
+const managerScope = [
+  "verificationCode",
+  "verificationCodeExpiry",
+  "deletedAt",
+  "createdAt",
+  "updatedAt",
 ];
 
 @DefaultScope(() => ({
-  attributes: [...defaultAttribute],
+  attributes: defaultAttribute,
 }))
 @Scopes(() => ({
   adminScope: { attributes: [...defaultAttribute, ...adminAttributes] },
+  userScope: { attributes: defaultAttribute },
+  managerScope: { attributes: [...defaultAttribute, ...managerScope] },
 }))
 @Table({ paranoid: true })
 export class User extends Model {
+  @BeforeCreate
+  @BeforeUpdate
+  static async hashPassword(instance: User) {
+    if (instance.changed("password")) {
+      const salt = await bcrypt.genSalt();
+      const hashedPass = await bcrypt.hash(instance.password, salt);
+      instance.password = hashedPass;
+    }
+  }
+
   @PrimaryKey
   @AutoIncrement
   @Column({ type: DataType.INTEGER })
@@ -104,26 +127,16 @@ export class User extends Model {
   @Column({ type: DataType.STRING })
   password: string;
 
-  @BeforeUpdate
-  @BeforeCreate
-  static async hashPassword(instance: User) {
-    if (instance.changed("password")) {
-      const salt = await bcrypt.genSalt();
-      const hashedPass = await bcrypt.hash(instance.password, salt);
-      instance.password = hashedPass;
-    }
-  }
-
   @AllowNull
   @Column({ type: DataType.STRING })
-  confirmationCode: string | null;
+  verificationCode: string | null;
 
   @AllowNull
   @Column({ type: DataType.DATE })
-  confirmationCodeExpiry: Date | null;
+  verificationCodeExpiry: Date | null;
 
-  public setConfirmationCode(code: string) {
-    this.confirmationCode = code;
-    this.confirmationCodeExpiry = new Date(Date.now() + 1000 * 60 * 15);
+  public setVerificationCode(code: string) {
+    this.verificationCode = code;
+    this.verificationCodeExpiry = new Date(Date.now() + 1000 * 60 * 15);
   }
 }
