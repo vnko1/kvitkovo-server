@@ -8,7 +8,11 @@ import { AppService } from "src/common/services";
 import { MailService } from "src/modules/mail";
 import { UserService } from "src/modules/user";
 
-import { ChangeResetPasswordDto, CreateUserDto } from "../dto";
+import {
+  ChangePasswordDto,
+  ChangeResetPasswordDto,
+  CreateUserDto,
+} from "../dto";
 
 @Injectable()
 export class UsersService extends AppService {
@@ -84,18 +88,19 @@ export class UsersService extends AppService {
   }
 
   async changeResetPassword(changeResetPasswordDto: ChangeResetPasswordDto) {
-    const hashPass = await this.hashPass(changeResetPasswordDto.password);
-    const user = await this.userService.updateUser(
-      {
-        password: hashPass,
-        verificationCode: null,
-        verificationCodeExpiry: null,
-      },
-      { where: { verificationCode: changeResetPasswordDto.verificationCode } }
-    );
+    const user = await this.userService.findUser({
+      where: { verificationCode: changeResetPasswordDto.verificationCode },
+    });
+    if (!user) throw new ForbiddenException();
+    user.password = changeResetPasswordDto.password;
+    user.verificationCode = null;
+    user.verificationCodeExpiry = null;
+    return await user.save();
+  }
 
-    if (!user[0]) throw new ForbiddenException();
-
-    return user;
+  async changePassword(userId: number, changePassword: ChangePasswordDto) {
+    const user = await this.userService.findUserByPK(userId);
+    user.password = changePassword.password;
+    return await user.save();
   }
 }

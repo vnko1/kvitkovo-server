@@ -34,9 +34,9 @@ export class AuthController {
   private readonly adminCred = process.env.ADMIN_CRED;
   constructor(private readonly authService: AuthService) {}
 
+  @Post("admin/register")
   @Public()
   @UsePipes(new ValidationPipe(registerSchema))
-  @Post("admin/register")
   async adminRegister(@Body() registerDto: RegisterDto) {
     if (registerDto.password !== this.adminCred) throw new ForbiddenException();
     return await this.authService.register(
@@ -46,42 +46,42 @@ export class AuthController {
     );
   }
 
+  @Post("register")
   @Public()
   @UsePipes(new ValidationPipe(registerSchema))
-  @Post("register")
   @HttpCode(HttpStatus.NO_CONTENT)
   async register(@Body() registerDto: RegisterDto) {
     return await this.authService.register(registerDto);
   }
 
-  @Public()
   @Get("confirm/reset")
+  @Public()
   @UsePipes(new ValidationPipe(resetCodeSchema))
   @HttpCode(HttpStatus.NO_CONTENT)
   async resetVerificationCode(@Body() resetCodeDto: ResetCodeDto) {
     return await this.authService.resetCode(resetCodeDto);
   }
 
-  @Public()
   @Get("email/confirm/:verificationCode")
+  @Public()
   async confirmCode(@Param("verificationCode") verificationCode: string) {
     return await this.authService.confirmEmail(verificationCode);
   }
 
-  @Public()
   @Post("login")
+  @Public()
   @UsePipes(new ValidationPipe(loginSchema))
   async login(@Body() loginDto: LoginDto) {
     return await this.authService.login(loginDto);
   }
 
-  @Public()
   @Get("google/login")
+  @Public()
   @UseGuards(GoogleOauthGuard)
   async auth() {}
 
-  @Public()
   @Get("google/callback")
+  @Public()
   @UseGuards(GoogleOauthGuard)
   async googleOAuthCallBack(@Req() req: Request, @Res() res: Response) {
     const redirectUrl = `${process.env.CLIENT_URL}${process.env.CLIENT_PROFILE}`;

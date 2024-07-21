@@ -19,12 +19,14 @@ import {
 import { paginationDefaultValues } from "src/utils";
 import { RolesEnum } from "src/types";
 
-import { Roles, User } from "src/common/decorators";
+import { Roles, UserData } from "src/common/decorators";
 import { ValidationPipe } from "src/common/pipes";
 
 import { UsersService } from "../services";
 import { ProfileGuard } from "../guards";
 import {
+  ChangePasswordDto,
+  changePasswordSchema,
   ChangeResetPasswordDto,
   changeResetPasswordSchema,
   CreateUserDto,
@@ -36,32 +38,32 @@ import {
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @Get("user/:userId")
   @Roles(RolesEnum.USER, RolesEnum.ADMIN, RolesEnum.MANAGER)
   @UseGuards(ProfileGuard)
-  @Get("user/:userId")
   async getUserById(
     @Param("userId", ParseIntPipe) userId: number,
-    @User("roles") roles: RolesEnum
+    @UserData("roles") roles: RolesEnum
   ) {
     return await this.usersService.getUser(userId, roles);
   }
 
+  @Delete("user/:userId")
   @Roles(RolesEnum.USER, RolesEnum.ADMIN)
   @UseGuards(ProfileGuard)
-  @Delete("user/:userId")
   @HttpCode(HttpStatus.NO_CONTENT)
   async deleteUserById(
     @Param("userId", ParseIntPipe) userId: number,
     @Query("forceDelete", new DefaultValuePipe(false), ParseBoolPipe)
     force: boolean,
-    @User("roles") roles: RolesEnum
+    @UserData("roles") roles: RolesEnum
   ) {
     const forceDelete = roles === RolesEnum.ADMIN && force;
     return await this.usersService.deleteUser(userId, forceDelete);
   }
 
-  @Roles(RolesEnum.MANAGER, RolesEnum.ADMIN)
   @Get("employees")
+  @Roles(RolesEnum.MANAGER, RolesEnum.ADMIN)
   async getEmployees(
     @Query(
       "offset",
@@ -75,7 +77,7 @@ export class UsersController {
       ParseIntPipe
     )
     limit: number,
-    @User("roles") roles: RolesEnum
+    @UserData("roles") roles: RolesEnum
   ) {
     return await this.usersService.findUsers(
       RolesEnum.MANAGER,
@@ -85,8 +87,8 @@ export class UsersController {
     );
   }
 
-  @Roles(RolesEnum.MANAGER, RolesEnum.ADMIN)
   @Get("clients")
+  @Roles(RolesEnum.MANAGER, RolesEnum.ADMIN)
   async getUsers(
     @Query(
       "offset",
@@ -100,7 +102,7 @@ export class UsersController {
       ParseIntPipe
     )
     limit: number,
-    @User("roles") roles: RolesEnum
+    @UserData("roles") roles: RolesEnum
   ) {
     return await this.usersService.findUsers(
       RolesEnum.USER,
@@ -110,9 +112,9 @@ export class UsersController {
     );
   }
 
+  @Post("user")
   @Roles(RolesEnum.ADMIN)
   @UsePipes(new ValidationPipe(createUserSchema))
-  @Post("user")
   async createUser(@Body() createUserDto: CreateUserDto) {
     return await this.usersService.createUser(createUserDto);
   }
@@ -122,19 +124,31 @@ export class UsersController {
   async resetPass(@Param("email") email: string) {
     const isValidEmail = emailSchema.safeParse(email);
 
-    if (!isValidEmail.success) {
+    if (!isValidEmail.success)
       throw new BadRequestException(isValidEmail.error.errors[0].message);
-    }
 
     return await this.usersService.resetPass(isValidEmail.data);
   }
 
-  @UsePipes(new ValidationPipe(changeResetPasswordSchema))
   @Post("reset-pass")
+  @UsePipes(new ValidationPipe(changeResetPasswordSchema))
   @HttpCode(HttpStatus.NO_CONTENT)
   async updateResetPassword(
     @Body() changeResetPasswordDto: ChangeResetPasswordDto
   ) {
     return await this.usersService.changeResetPassword(changeResetPasswordDto);
+  }
+
+  @Post("change-pass")
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async changePassword(
+    @UserData("userId") userId: number,
+    @Body() changePasswordDto: ChangePasswordDto
+  ) {
+    const parsedSchema = changePasswordSchema.safeParse(changePasswordDto);
+    if (!parsedSchema.success)
+      throw new BadRequestException(parsedSchema.error.errors[0].message);
+
+    return await this.usersService.changePassword(userId, parsedSchema.data);
   }
 }

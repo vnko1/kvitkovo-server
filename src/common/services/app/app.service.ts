@@ -51,9 +51,4 @@ export abstract class AppService {
     const defaultOptions: TempPassOptions = { specialChars: false, ...options };
     return generate(length, defaultOptions);
   }
-
-  protected async hashPass(pass: string) {
-    const salt = await bcrypt.genSalt();
-    return await bcrypt.hash(pass, salt);
-  }
 }
