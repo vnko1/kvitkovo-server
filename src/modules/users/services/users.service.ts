@@ -1,4 +1,5 @@
 import { ForbiddenException, Injectable } from "@nestjs/common";
+import { randomUUID } from "crypto";
 
 import { RolesEnum } from "src/types";
 
@@ -8,7 +9,6 @@ import { MailService } from "src/modules/mail";
 import { UserService } from "src/modules/user";
 
 import { ChangeResetPasswordDto, CreateUserDto } from "../dto";
-import { randomUUID } from "crypto";
 
 @Injectable()
 export class UsersService extends AppService {
@@ -71,6 +71,8 @@ export class UsersService extends AppService {
 
   async resetPass(email: string) {
     const user = await this.userService.findUser({ where: { email } });
+    if (!user) throw new ForbiddenException();
+
     user.setVerificationCode(randomUUID());
     await user.save();
 
@@ -85,6 +87,8 @@ export class UsersService extends AppService {
     const user = await this.userService.updateUser(
       {
         password: changeResetPasswordDto.password,
+        verificationCode: null,
+        verificationCodeExpiry: null,
       },
       { where: { verificationCode: changeResetPasswordDto.verificationCode } }
     );

@@ -1,8 +1,6 @@
 import {
   AllowNull,
   AutoIncrement,
-  BeforeCreate,
-  BeforeUpdate,
   BeforeValidate,
   Column,
   DataType,
@@ -61,6 +59,16 @@ const managerScope = [
 }))
 @Table({ paranoid: true })
 export class User extends Model {
+  @BeforeValidate
+  static async hashPassword(instance: User) {
+    if (instance.changed("password")) {
+      console.log("🚀 ~ User ~ hashPassword ~ instance:", instance.password);
+      const salt = await bcrypt.genSalt();
+      const hashedPass = await bcrypt.hash(instance.password, salt);
+      instance.password = hashedPass;
+    }
+  }
+
   @PrimaryKey
   @AutoIncrement
   @Column({ type: DataType.INTEGER })
@@ -117,17 +125,6 @@ export class User extends Model {
 
   @Column({ type: DataType.STRING })
   password: string;
-
-  @BeforeUpdate
-  @BeforeCreate
-  @BeforeValidate
-  static async hashPassword(instance: User) {
-    if (instance.changed("password")) {
-      const salt = await bcrypt.genSalt();
-      const hashedPass = await bcrypt.hash(instance.password, salt);
-      instance.password = hashedPass;
-    }
-  }
 
   @AllowNull
   @Column({ type: DataType.STRING })
