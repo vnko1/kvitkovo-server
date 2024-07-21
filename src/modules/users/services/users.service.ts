@@ -1,7 +1,7 @@
 import { ForbiddenException, Injectable } from "@nestjs/common";
 import { randomUUID } from "crypto";
 
-import { RolesEnum } from "src/types";
+import { RolesEnum, StatusEnum } from "src/types";
 
 import { AppService } from "src/common/services";
 
@@ -35,7 +35,7 @@ export class UsersService extends AppService {
       { paranoid: roles === RolesEnum.USER },
       this.getUserScopeByRole(roles)
     );
-
+    if (!user) throw new ForbiddenException();
     if (roles === RolesEnum.MANAGER && user.roles === RolesEnum.ADMIN)
       throw new ForbiddenException();
 
@@ -102,6 +102,7 @@ export class UsersService extends AppService {
 
   async changePassword(userId: number, changePassword: ChangePasswordDto) {
     const user = await this.userService.findUserByPK(userId);
+    if (!user) throw new ForbiddenException();
     user.password = changePassword.password;
     return await user.save();
   }
@@ -118,12 +119,25 @@ export class UsersService extends AppService {
       this.getUserScopeByRole(roles)
     );
 
+    if (!user) throw new ForbiddenException();
+
     if (onlyEmployees && user.roles === RolesEnum.USER)
       throw new ForbiddenException();
 
     Object.keys(updateUserDto).forEach(
       (data) => (user[data] = updateUserDto[data])
     );
+    return await user.save();
+  }
+
+  async toggleUserStatus(userId: number, status: StatusEnum, roles: RolesEnum) {
+    const user = await this.userService.findUserByPK(userId);
+    if (!user) throw new ForbiddenException();
+
+    if (roles === RolesEnum.MANAGER && user.roles !== RolesEnum.USER)
+      throw new ForbiddenException();
+
+    user.status = status;
     return await user.save();
   }
 }

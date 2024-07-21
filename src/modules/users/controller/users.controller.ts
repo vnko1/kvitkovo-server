@@ -18,7 +18,7 @@ import {
 } from "@nestjs/common";
 
 import { paginationDefaultValues } from "src/utils";
-import { RolesEnum } from "src/types";
+import { RolesEnum, StatusEnum } from "src/types";
 
 import { Rights, Roles, UserData } from "src/common/decorators";
 import { ValidationPipe } from "src/common/pipes";
@@ -184,6 +184,34 @@ export class UsersController {
       updateEmployeesDto,
       roles,
       true
+    );
+  }
+
+  @Put("user/:userId/active")
+  @Roles(RolesEnum.ADMIN, RolesEnum.MANAGER)
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async enableUser(
+    @Param("userId", ParseIntPipe) userId: number,
+    @UserData("roles") roles: RolesEnum
+  ) {
+    return await this.usersService.toggleUserStatus(
+      userId,
+      StatusEnum.ACTIVE,
+      roles
+    );
+  }
+
+  @Put("user/:userId/inactive")
+  @Roles(RolesEnum.ADMIN, RolesEnum.MANAGER)
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async disableUser(
+    @Param("userId", ParseIntPipe) userId: number,
+    @UserData("roles") roles: RolesEnum
+  ) {
+    return await this.usersService.toggleUserStatus(
+      userId,
+      StatusEnum.INACTIVE,
+      roles
     );
   }
 }
