@@ -1,13 +1,20 @@
 import { ForbiddenException, Injectable } from "@nestjs/common";
 
+import { RolesEnum } from "src/types";
+
 import { AppService } from "src/common/services";
 
+import { MailService } from "src/modules/mail";
 import { UserService } from "src/modules/user";
-import { RolesEnum } from "src/types";
+
+import { CreateUserDto } from "../dto";
 
 @Injectable()
 export class UsersService extends AppService {
-  constructor(private readonly userService: UserService) {
+  constructor(
+    private readonly userService: UserService,
+    private readonly mailService: MailService
+  ) {
     super();
   }
 
@@ -43,5 +50,22 @@ export class UsersService extends AppService {
       },
       this.getUserScopeByRole(roles)
     );
+  }
+
+  async createUser(createUserDto: CreateUserDto) {
+    const newUser = await this.userService.createUser(createUserDto);
+
+    const tempPass = this.genTempPass();
+    newUser.password = tempPass;
+    const sentOpt = this.mailService.temporaryPassTemp(newUser.email, tempPass);
+    await this.mailService.sendEmail(sentOpt);
+    await newUser.save();
+
+    return newUser;
+  }
+
+  async resetPass(email: string) {
+    const user = await this.userService.findUser({ where: { email } });
+    return user;
   }
 }

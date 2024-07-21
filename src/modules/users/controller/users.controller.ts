@@ -1,5 +1,6 @@
 import {
-  // Body,
+  BadRequestException,
+  Body,
   Controller,
   DefaultValuePipe,
   Delete,
@@ -9,24 +10,28 @@ import {
   Param,
   ParseBoolPipe,
   ParseIntPipe,
+  Post,
   Query,
   UseGuards,
+  UsePipes,
 } from "@nestjs/common";
 
 import { paginationDefaultValues } from "src/utils";
 import { RolesEnum } from "src/types";
 
 import { Roles, User } from "src/common/decorators";
+import { ValidationPipe } from "src/common/pipes";
 
 import { UsersService } from "../services";
 import { ProfileGuard } from "../guards";
+import { CreateUserDto, createUserSchema, emailSchema } from "../dto";
 
 @Controller("users")
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @UseGuards(ProfileGuard)
   @Roles(RolesEnum.USER, RolesEnum.ADMIN, RolesEnum.MANAGER)
+  @UseGuards(ProfileGuard)
   @Get("user/:userId")
   async getUserById(
     @Param("userId", ParseIntPipe) userId: number,
@@ -97,5 +102,24 @@ export class UsersController {
       limit,
       roles
     );
+  }
+
+  @Roles(RolesEnum.ADMIN)
+  @UsePipes(new ValidationPipe(createUserSchema))
+  @Post("user")
+  async createUser(@Body() createUserDto: CreateUserDto) {
+    return await this.usersService.createUser(createUserDto);
+  }
+
+  @Post("reset-pass/:email")
+  // @HttpCode(HttpStatus.NO_CONTENT)
+  async resetPass(@Param("email") email: string) {
+    const isValidEmail = emailSchema.safeParse(email);
+
+    if (!isValidEmail.success) {
+      throw new BadRequestException(isValidEmail.error.errors[0].message);
+    }
+
+    return await this.usersService.resetPass(isValidEmail.data);
   }
 }

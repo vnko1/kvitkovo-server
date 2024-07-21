@@ -5,7 +5,6 @@ import {
 } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { randomUUID } from "crypto";
-import { generate } from "otp-generator";
 
 import { GoogleProfile, RolesEnum, StatusEnum } from "src/types";
 import { AppService } from "src/common/services";
@@ -14,7 +13,7 @@ import { MailService } from "src/modules/mail";
 import { User, UserService } from "src/modules/user";
 
 import { LoginDto, RegisterDto, ResetCodeDto } from "../dto";
-import { Payload, TempPassOptions } from "./auth.type";
+import { Payload } from "./auth.type";
 
 @Injectable()
 export class AuthService extends AppService {
@@ -24,11 +23,6 @@ export class AuthService extends AppService {
     private readonly mailService: MailService
   ) {
     super();
-  }
-
-  private genTempPass(length = 8, options?: TempPassOptions) {
-    const defaultOptions: TempPassOptions = { specialChars: false, ...options };
-    return generate(length, defaultOptions);
   }
 
   private getConfirmUrl(code: string) {
