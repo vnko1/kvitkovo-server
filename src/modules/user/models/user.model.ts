@@ -1,7 +1,8 @@
 import {
   AllowNull,
   AutoIncrement,
-  BeforeValidate,
+  BeforeCreate,
+  BeforeUpdate,
   Column,
   DataType,
   Default,
@@ -59,7 +60,8 @@ const managerScope = [
 }))
 @Table({ paranoid: true })
 export class User extends Model {
-  @BeforeValidate
+  @BeforeCreate
+  @BeforeUpdate
   static async hashPassword(instance: User) {
     if (instance.changed("password")) {
       const salt = await bcrypt.genSalt();

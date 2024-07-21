@@ -62,9 +62,9 @@ export class UsersService extends AppService {
 
     const tempPass = this.genTempPass();
     newUser.password = tempPass;
+    await newUser.save();
     const sentOpt = this.mailService.temporaryPassTemp(newUser.email, tempPass);
     await this.mailService.sendEmail(sentOpt);
-    await newUser.save();
 
     return newUser;
   }
@@ -84,9 +84,10 @@ export class UsersService extends AppService {
   }
 
   async changeResetPassword(changeResetPasswordDto: ChangeResetPasswordDto) {
+    const hashPass = await this.hashPass(changeResetPasswordDto.password);
     const user = await this.userService.updateUser(
       {
-        password: changeResetPasswordDto.password,
+        password: hashPass,
         verificationCode: null,
         verificationCodeExpiry: null,
       },
