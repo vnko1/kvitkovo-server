@@ -56,7 +56,6 @@ export class Category extends Model {
   icon: CategoryIconEnum;
 
   @Default(0)
-  @AutoIncrement
   @Column({
     type: DataType.INTEGER,
   })
