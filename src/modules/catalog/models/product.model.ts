@@ -12,6 +12,9 @@ import {
 } from "sequelize-typescript";
 import { ProductStatusEnum } from "src/types";
 import { Category } from "./category.model";
+import { Color } from "./color.model";
+import { Size } from "./size.model";
+import { ProductType } from "./productType.model";
 
 @Table
 export class Product extends Model {
@@ -73,4 +76,25 @@ export class Product extends Model {
 
   @BelongsTo(() => Category, { onDelete: "CASCADE", onUpdate: "CASCADE" })
   category: Category;
+
+  @ForeignKey(() => Color)
+  @Column
+  colorId: number;
+
+  @BelongsTo(() => Color, { onDelete: "SET NULL", onUpdate: "CASCADE" })
+  color: Color;
+
+  @ForeignKey(() => Size)
+  @Column
+  sizeId: number;
+
+  @BelongsTo(() => Size, { onDelete: "SET NULL", onUpdate: "CASCADE" })
+  size: Size;
+
+  @ForeignKey(() => ProductType)
+  @Column
+  productTypeId: number;
+
+  @BelongsTo(() => ProductType, { onDelete: "SET NULL", onUpdate: "CASCADE" })
+  productType: ProductType;
 }

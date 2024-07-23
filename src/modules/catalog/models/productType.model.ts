@@ -10,17 +10,14 @@ import {
 import { Product } from "./product.model";
 
 @Table
-export class Color extends Model {
+export class ProductType extends Model {
   @PrimaryKey
   @AutoIncrement
   @Column({ type: DataType.INTEGER })
-  colorId: number;
+  productTypeId: number;
 
   @Column({ type: DataType.STRING })
   name: string;
-
-  @Column({ type: DataType.STRING })
-  alias: string;
 
   @HasMany(() => Product)
   products: Product[];

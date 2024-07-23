@@ -11,7 +11,7 @@ import {
   UsersModule,
   CatalogModule,
 } from "./modules";
-import { Category, Product } from "./modules/catalog";
+import { Category, Color, Product, ProductType, Size } from "./modules/catalog";
 
 @Module({
   imports: [
@@ -27,7 +27,7 @@ import { Category, Product } from "./modules/catalog";
         retryAttempts: 2,
         synchronize: true,
         autoLoadModels: true,
-        models: [User, Category, Product],
+        models: [User, Category, Product, Color, Size, ProductType],
       }),
     }),
     MailModule,
