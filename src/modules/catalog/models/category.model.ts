@@ -1,9 +1,9 @@
-import { Model } from "sequelize";
 import {
   AutoIncrement,
   Column,
   DataType,
-  ForeignKey,
+  Model,
+  // ForeignKey,
   PrimaryKey,
   Table,
 } from "sequelize-typescript";
@@ -21,10 +21,10 @@ export class Category extends Model {
   @Column({ type: DataType.STRING })
   alias: string;
 
-  @ForeignKey(() => Team)
-  @Column
-  teamId: number;
+  // @ForeignKey(() => Team)
+  // @Column
+  // teamId: number;
 
-  @BelongsTo(() => Team)
-  team: Team;
+  // @BelongsTo(() => Team)
+  // team: Team;
 }

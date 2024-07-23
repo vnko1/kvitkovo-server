@@ -9,6 +9,7 @@ import {
   TasksModule,
   MailModule,
   UsersModule,
+  CatalogModule,
 } from "./modules";
 
 @Module({
@@ -33,6 +34,7 @@ import {
     UserModule,
     AuthModule,
     UsersModule,
+    CatalogModule,
   ],
 })
 export class AppModule {}
