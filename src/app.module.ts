@@ -11,6 +11,7 @@ import {
   MailModule,
   UsersModule,
   CatalogModule,
+  CategoriesModule,
 } from "./modules";
 
 @Module({
@@ -36,6 +37,7 @@ import {
     AuthModule,
     UsersModule,
     CatalogModule,
+    CategoriesModule,
   ],
 })
 export class AppModule {}

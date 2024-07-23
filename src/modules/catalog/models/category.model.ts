@@ -59,11 +59,12 @@ export class Category extends Model {
   })
   icon: CategoryIconEnum;
 
-  @Default(SortValuesEnum.DESC)
+  @Default(0)
+  @AutoIncrement
   @Column({
-    type: DataType.ENUM(SortValuesEnum.DESC, SortValuesEnum.ASC),
+    type: DataType.INTEGER,
   })
-  sort: SortValuesEnum;
+  sortValue: number;
 
   @HasMany(() => Product, { onDelete: "CASCADE", onUpdate: "CASCADE" })
   products: Product[];
