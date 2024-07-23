@@ -46,7 +46,7 @@ export class CategoryService extends AppService {
     return this.categoryModel.findByPk(pk, opt);
   }
 
-  async findCategories(opt: FindOptions) {
+  async findCategories(opt?: FindOptions) {
     return this.categoryModel.findAll(opt);
   }
 }

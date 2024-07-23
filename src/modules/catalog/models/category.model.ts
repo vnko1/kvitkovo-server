@@ -9,6 +9,7 @@ import {
   Model,
   PrimaryKey,
   Table,
+  Unique,
 } from "sequelize-typescript";
 import { CategoryIconEnum, CategoryStatusEnum } from "src/types";
 import { Product } from "./product.model";
@@ -55,7 +56,7 @@ export class Category extends Model {
   })
   icon: CategoryIconEnum;
 
-  @Default(0)
+  @Unique
   @Column({
     type: DataType.INTEGER,
   })
