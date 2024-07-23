@@ -10,11 +10,7 @@ import {
   PrimaryKey,
   Table,
 } from "sequelize-typescript";
-import {
-  CategoryIconEnum,
-  CategoryStatusEnum,
-  SortValuesEnum,
-} from "src/types";
+import { CategoryIconEnum, CategoryStatusEnum } from "src/types";
 import { Product } from "./product.model";
 
 @Table
