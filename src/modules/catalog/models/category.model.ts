@@ -1,11 +1,12 @@
 import {
   AutoIncrement,
+  BelongsTo,
   Column,
   DataType,
   Default,
+  ForeignKey,
   HasMany,
   Model,
-  // ForeignKey,
   PrimaryKey,
   Table,
 } from "sequelize-typescript";
@@ -42,7 +43,7 @@ export class Category extends Model {
   @Column({
     type: DataType.ENUM(CategoryStatusEnum.ACTIVE, CategoryStatusEnum.INACTIVE),
   })
-  categoryStatus: CategoryStatusEnum;
+  status: CategoryStatusEnum;
 
   @Default(CategoryIconEnum.FLOWERS)
   @Column({
@@ -64,13 +65,16 @@ export class Category extends Model {
   })
   sort: SortValuesEnum;
 
-  @HasMany(() => Product, {})
+  @HasMany(() => Product, { onDelete: "CASCADE", onUpdate: "CASCADE" })
   products: Product[];
 
-  // @ForeignKey(() => Team)
-  // @Column
-  // teamId: number;
+  @ForeignKey(() => Category)
+  @Column({ type: DataType.INTEGER })
+  parentId: number;
 
-  // @BelongsTo(() => Team)
-  // team: Team;
+  @BelongsTo(() => Category, "parentId")
+  parent: Category;
+
+  @HasMany(() => Category, "parentId")
+  children: Category[];
 }

@@ -62,12 +62,15 @@ export class Product extends Model {
       ProductStatusEnum.INACTIVE
     ),
   })
-  productStatus: ProductStatusEnum;
+  status: ProductStatusEnum;
+
+  @Column({ type: DataType.BOOLEAN })
+  allowAddToConstructor: boolean;
 
   @ForeignKey(() => Category)
   @Column
   categoryId: number;
 
-  @BelongsTo(() => Category)
+  @BelongsTo(() => Category, { onDelete: "CASCADE", onUpdate: "CASCADE" })
   category: Category;
 }
