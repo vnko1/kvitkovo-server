@@ -1,16 +1,19 @@
 import {
   AllowNull,
   AutoIncrement,
+  BelongsTo,
   Column,
   DataType,
   Default,
+  ForeignKey,
   Model,
   PrimaryKey,
   Table,
 } from "sequelize-typescript";
 import { ProductStatusEnum } from "src/types";
+import { Category } from "./category.model";
 
-Table;
+@Table
 export class Product extends Model {
   @PrimaryKey
   @AutoIncrement
@@ -60,4 +63,11 @@ export class Product extends Model {
     ),
   })
   productStatus: ProductStatusEnum;
+
+  @ForeignKey(() => Category)
+  @Column
+  categoryId: number;
+
+  @BelongsTo(() => Category)
+  category: Category;
 }
