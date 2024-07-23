@@ -3,6 +3,7 @@ import { ConfigModule } from "@nestjs/config";
 import { SequelizeModule } from "@nestjs/sequelize";
 
 import { User } from "./modules/user";
+import { Category, Color, Product, ProductType, Size } from "./modules/catalog";
 import {
   UserModule,
   AuthModule,
@@ -11,7 +12,6 @@ import {
   UsersModule,
   CatalogModule,
 } from "./modules";
-import { Category, Color, Product, ProductType, Size } from "./modules/catalog";
 
 @Module({
   imports: [
