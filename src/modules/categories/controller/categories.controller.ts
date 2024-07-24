@@ -31,8 +31,8 @@ export class CategoriesController {
   @Post()
   @Roles(RolesEnum.ADMIN, RolesEnum.MANAGER)
   @UsePipes(new ValidationPipe(createCategorySchema))
-  async createCategory(@Body() createCategoryDto: CreateCategoryDto) {
-    return await this.categoriesService.createCategory(createCategoryDto);
+  async createCategory(@Body() createInstanceDto: CreateCategoryDto) {
+    return await this.categoriesService.createCategory(createInstanceDto);
   }
 
   @Delete(":categoryId")
@@ -47,11 +47,11 @@ export class CategoriesController {
   @UsePipes(new ValidationPipe(updateCategorySchema))
   async updateCategory(
     @Param("categoryId", ParseIntPipe) categoryId: number,
-    @Body() updateCategoryDto: UpdateCategoryDto
+    @Body() updateInstanceDto: UpdateCategoryDto
   ) {
     return await this.categoriesService.updateCategory(
       categoryId,
-      updateCategoryDto
+      updateInstanceDto
     );
   }
 

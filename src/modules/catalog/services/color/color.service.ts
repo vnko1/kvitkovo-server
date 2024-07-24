@@ -44,7 +44,7 @@ export class ColorService extends AppService {
     return this.colorModel.findByPk(pk, opt);
   }
 
-  async findColors(opt: FindOptions) {
+  async findColors(opt?: FindOptions) {
     return this.colorModel.findAll(opt);
   }
 }
