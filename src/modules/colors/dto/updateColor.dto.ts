@@ -1,8 +1,7 @@
 import { z } from "zod";
-
 import { CategoryIconEnum, CategoryStatusEnum } from "src/types";
 
-export const updateCategorySchema = z
+export const updateColorSchema = z
   .object({
     name: z.string().optional(),
     metaDescription: z.string().optional(),
@@ -22,4 +21,4 @@ export const updateCategorySchema = z
     }
   );
 
-export type UpdateCategoryDto = z.infer<typeof updateCategorySchema>;
+export type UpdateColorDto = z.infer<typeof updateColorSchema>;

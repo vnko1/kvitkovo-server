@@ -11,8 +11,8 @@ export class CategoriesService extends AppService {
     super();
   }
 
-  async createCategory(createCategoryDto: CreateCategoryDto) {
-    return await this.categoryService.createCategory(createCategoryDto);
+  async createCategory(createInstanceDto: CreateCategoryDto) {
+    return await this.categoryService.createCategory(createInstanceDto);
   }
 
   async destroyCategory(categoryId: number) {
@@ -21,13 +21,13 @@ export class CategoriesService extends AppService {
 
   async updateCategory(
     categoryId: number,
-    updateCategoryDto: UpdateCategoryDto
+    updateInstanceDto: UpdateCategoryDto
   ) {
     const category = await this.categoryService.findCategoryById(categoryId);
     if (!category) throw new ForbiddenException();
 
-    Object.keys(updateCategoryDto).forEach(
-      (data) => (category[data] = updateCategoryDto[data])
+    Object.keys(updateInstanceDto).forEach(
+      (data) => (category[data] = updateInstanceDto[data])
     );
 
     return await category.save();
