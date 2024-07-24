@@ -47,7 +47,7 @@ export class ProductService extends AppService {
     return this.productModel.findByPk(pk, opt);
   }
 
-  async findInstances(opt: FindOptions) {
+  async findInstances(opt?: FindOptions) {
     return this.productModel.findAll(opt);
   }
 
