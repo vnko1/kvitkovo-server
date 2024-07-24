@@ -18,33 +18,33 @@ export class ColorService extends AppService {
     super();
   }
 
-  async createColor<T extends Optional<any, string>>(
+  async createInstance<T extends Optional<any, string>>(
     values: T,
     opt?: CreateOptions
   ) {
     return this.colorModel.create(values, opt);
   }
 
-  async updateColor<T extends Optional<any, string>>(
+  async updateInstance<T extends Optional<any, string>>(
     values: T,
     opt?: UpdateOptions
   ) {
     return this.colorModel.update(values, opt);
   }
 
-  async deleteColor(opt: DestroyOptions) {
+  async deleteInstance(opt: DestroyOptions) {
     return this.colorModel.destroy(opt);
   }
 
-  async findColor(opt?: FindOptions) {
+  async findInstance(opt?: FindOptions) {
     return this.colorModel.findOne(opt);
   }
 
-  async findColorById(pk: number, opt?: FindOptions) {
+  async findInstanceById(pk: number, opt?: FindOptions) {
     return this.colorModel.findByPk(pk, opt);
   }
 
-  async findColors(opt?: FindOptions) {
+  async findInstances(opt?: FindOptions) {
     return this.colorModel.findAll(opt);
   }
 }

@@ -18,33 +18,33 @@ export class SizeService extends AppService {
     super();
   }
 
-  async createSize<T extends Optional<any, string>>(
+  async createInstance<T extends Optional<any, string>>(
     values: T,
     opt?: CreateOptions
   ) {
     return this.sizeModel.create(values, opt);
   }
 
-  async updateSize<T extends Optional<any, string>>(
+  async updateInstance<T extends Optional<any, string>>(
     values: T,
     opt?: UpdateOptions
   ) {
     return this.sizeModel.update(values, opt);
   }
 
-  async deleteSize(opt: DestroyOptions) {
+  async deleteInstance(opt: DestroyOptions) {
     return this.sizeModel.destroy(opt);
   }
 
-  async findSize(opt?: FindOptions) {
+  async findInstance(opt?: FindOptions) {
     return this.sizeModel.findOne(opt);
   }
 
-  async findSizeById(pk: number, opt?: FindOptions) {
+  async findInstanceById(pk: number, opt?: FindOptions) {
     return this.sizeModel.findByPk(pk, opt);
   }
 
-  async findSizes(opt: FindOptions) {
+  async findInstances(opt?: FindOptions) {
     return this.sizeModel.findAll(opt);
   }
 }

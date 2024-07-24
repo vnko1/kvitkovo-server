@@ -13,6 +13,7 @@ import {
   CatalogModule,
   CategoriesModule,
   ColorsModule,
+  SizesModule,
 } from "./modules";
 
 @Module({
@@ -40,6 +41,7 @@ import {
     CatalogModule,
     CategoriesModule,
     ColorsModule,
+    SizesModule,
   ],
 })
 export class AppModule {}

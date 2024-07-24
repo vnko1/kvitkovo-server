@@ -31,42 +31,42 @@ export class ColorsController {
   @Post()
   @Roles(RolesEnum.ADMIN, RolesEnum.MANAGER)
   @UsePipes(new ValidationPipe(createColorSchema))
-  async createCategory(@Body() createInstanceDto: CreateColorDto) {
-    return await this.colorsService.createColor(createInstanceDto);
+  async createInstance(@Body() createInstanceDto: CreateColorDto) {
+    return await this.colorsService.createInstance(createInstanceDto);
   }
 
   @Delete(":colorId")
   @Roles(RolesEnum.ADMIN, RolesEnum.MANAGER)
   @HttpCode(HttpStatus.NO_CONTENT)
-  async deleteCategory(@Param("colorId", ParseIntPipe) colorId: number) {
-    return await this.colorsService.destroyColor(colorId);
+  async deleteInstance(@Param("colorId", ParseIntPipe) colorId: number) {
+    return await this.colorsService.destroyInstance(colorId);
   }
 
   @Put(":colorId")
   @Roles(RolesEnum.ADMIN, RolesEnum.MANAGER)
   @UsePipes(new ValidationPipe(updateColorSchema))
-  async updateCategory(
+  async updateInstance(
     @Param("colorId", ParseIntPipe) colorId: number,
     @Body() updateInstanceDto: UpdateColorDto
   ) {
-    return await this.colorsService.updateColor(colorId, updateInstanceDto);
+    return await this.colorsService.updateInstance(colorId, updateInstanceDto);
   }
 
   @Get(":colorId")
   @Public()
-  async getCategoryById(@Param("colorId", ParseIntPipe) colorId: number) {
-    return await this.colorsService.getColor(colorId);
+  async getInstanceById(@Param("colorId", ParseIntPipe) colorId: number) {
+    return await this.colorsService.getInstance(colorId);
   }
 
   @Get("name/:name")
   @Public()
-  async getColorByName(@Param("name") name: string) {
-    return await this.colorsService.getColorByName(name);
+  async getInstanceByName(@Param("name") name: string) {
+    return await this.colorsService.getInstanceByName(name);
   }
 
   @Get()
   @Public()
-  async getAllColors() {
-    return await this.colorsService.getAllColors();
+  async getAllInstances() {
+    return await this.colorsService.getAllInstances();
   }
 }
