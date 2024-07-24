@@ -27,29 +27,29 @@ import { CategoriesService } from "../services";
 
 @Controller("categories")
 export class CategoriesController {
-  constructor(private readonly categoriesService: CategoriesService) {}
+  constructor(private readonly instanceService: CategoriesService) {}
   @Post()
   @Roles(RolesEnum.ADMIN, RolesEnum.MANAGER)
   @UsePipes(new ValidationPipe(createCategorySchema))
-  async createCategory(@Body() createInstanceDto: CreateCategoryDto) {
-    return await this.categoriesService.createCategory(createInstanceDto);
+  async createInstance(@Body() createInstanceDto: CreateCategoryDto) {
+    return await this.instanceService.createInstance(createInstanceDto);
   }
 
   @Delete(":categoryId")
   @Roles(RolesEnum.ADMIN, RolesEnum.MANAGER)
   @HttpCode(HttpStatus.NO_CONTENT)
-  async deleteCategory(@Param("categoryId", ParseIntPipe) categoryId: number) {
-    return await this.categoriesService.destroyCategory(categoryId);
+  async deleteInstance(@Param("categoryId", ParseIntPipe) categoryId: number) {
+    return await this.instanceService.destroyInstance(categoryId);
   }
 
   @Put(":categoryId")
   @Roles(RolesEnum.ADMIN, RolesEnum.MANAGER)
   @UsePipes(new ValidationPipe(updateCategorySchema))
-  async updateCategory(
+  async updateInstance(
     @Param("categoryId", ParseIntPipe) categoryId: number,
     @Body() updateInstanceDto: UpdateCategoryDto
   ) {
-    return await this.categoriesService.updateCategory(
+    return await this.instanceService.updateInstance(
       categoryId,
       updateInstanceDto
     );
@@ -57,13 +57,13 @@ export class CategoriesController {
 
   @Get(":categoryId")
   @Public()
-  async getCategoryById(@Param("categoryId", ParseIntPipe) categoryId: number) {
-    return await this.categoriesService.getCategory(categoryId);
+  async getInstanceById(@Param("categoryId", ParseIntPipe) categoryId: number) {
+    return await this.instanceService.getInstance(categoryId);
   }
 
   @Get()
   @Public()
-  async getCategories() {
-    return await this.categoriesService.getAllCategories();
+  async getInstances() {
+    return await this.instanceService.getAllInstances();
   }
 }

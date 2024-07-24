@@ -20,33 +20,33 @@ export class CategoryService extends AppService {
     super();
   }
 
-  async createCategory<T extends Optional<any, string>>(
+  async createInstance<T extends Optional<any, string>>(
     values: T,
     opt?: CreateOptions
   ) {
     return this.categoryModel.create(values, opt);
   }
 
-  async updateCategory<T extends Optional<any, string>>(
+  async updateInstance<T extends Optional<any, string>>(
     values: T,
     opt?: UpdateOptions
   ) {
     return this.categoryModel.update(values, opt);
   }
 
-  async deleteCategory(opt: DestroyOptions) {
+  async deleteInstance(opt: DestroyOptions) {
     return this.categoryModel.destroy(opt);
   }
 
-  async findCategory(opt?: FindOptions) {
+  async findInstance(opt?: FindOptions) {
     return this.categoryModel.findOne(opt);
   }
 
-  async findCategoryById(pk: number, opt?: FindOptions) {
+  async findInstanceById(pk: number, opt?: FindOptions) {
     return this.categoryModel.findByPk(pk, opt);
   }
 
-  async findCategories(opt?: FindOptions) {
+  async findInstances(opt?: FindOptions) {
     return this.categoryModel.findAll(opt);
   }
 }

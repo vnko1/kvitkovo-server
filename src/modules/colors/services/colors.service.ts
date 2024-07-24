@@ -7,38 +7,38 @@ import { CreateColorDto, UpdateColorDto } from "../dto";
 
 @Injectable()
 export class ColorsService extends AppService {
-  constructor(private readonly colorsService: ColorService) {
+  constructor(private readonly instanceService: ColorService) {
     super();
   }
 
-  async createColor(createInstanceDto: CreateColorDto) {
-    return await this.colorsService.createColor(createInstanceDto);
+  async createInstance(createInstanceDto: CreateColorDto) {
+    return await this.instanceService.createInstance(createInstanceDto);
   }
 
-  async destroyColor(colorId: number) {
-    return await this.colorsService.deleteColor({ where: { colorId } });
+  async destroyInstance(colorId: number) {
+    return await this.instanceService.deleteInstance({ where: { colorId } });
   }
 
-  async updateColor(colorId: number, updateInstanceDto: UpdateColorDto) {
-    const category = await this.colorsService.findColorById(colorId);
-    if (!category) throw new ForbiddenException();
+  async updateInstance(colorId: number, updateInstanceDto: UpdateColorDto) {
+    const instance = await this.instanceService.findInstanceById(colorId);
+    if (!instance) throw new ForbiddenException();
 
     Object.keys(updateInstanceDto).forEach(
-      (data) => (category[data] = updateInstanceDto[data])
+      (data) => (instance[data] = updateInstanceDto[data])
     );
 
-    return await category.save();
+    return await instance.save();
   }
 
-  async getColor(colorId: number) {
-    return await this.colorsService.findColorById(colorId);
+  async getInstance(colorId: number) {
+    return await this.instanceService.findInstanceById(colorId);
   }
 
-  async getAllColors() {
-    return await this.colorsService.findColors();
+  async getAllInstances() {
+    return await this.instanceService.findInstances();
   }
 
-  async getColorByName(name: string) {
-    return this.colorsService.findColor({ where: { name } });
+  async getInstanceByName(name: string) {
+    return this.instanceService.findInstance({ where: { name } });
   }
 }

@@ -21,33 +21,33 @@ export class ProductTypeService extends AppService {
     super();
   }
 
-  async createProductType<T extends Optional<any, string>>(
+  async createInstance<T extends Optional<any, string>>(
     values: T,
     opt?: CreateOptions
   ) {
     return this.productTypeModel.create(values, opt);
   }
 
-  async updateProductType<T extends Optional<any, string>>(
+  async updateInstance<T extends Optional<any, string>>(
     values: T,
     opt?: UpdateOptions
   ) {
     return this.productTypeModel.update(values, opt);
   }
 
-  async deleteProductType(opt: DestroyOptions) {
+  async deleteInstance(opt: DestroyOptions) {
     return this.productTypeModel.destroy(opt);
   }
 
-  async findProductType(opt?: FindOptions) {
+  async findInstance(opt?: FindOptions) {
     return this.productTypeModel.findOne(opt);
   }
 
-  async findProductTypeById(pk: number, opt?: FindOptions) {
+  async findInstanceById(pk: number, opt?: FindOptions) {
     return this.productTypeModel.findByPk(pk, opt);
   }
 
-  async findProductTypes(opt: FindOptions) {
+  async findInstances(opt: FindOptions) {
     return this.productTypeModel.findAll(opt);
   }
 }

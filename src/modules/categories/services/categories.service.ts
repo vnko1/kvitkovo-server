@@ -7,37 +7,37 @@ import { CreateCategoryDto, UpdateCategoryDto } from "../dto";
 
 @Injectable()
 export class CategoriesService extends AppService {
-  constructor(private readonly categoryService: CategoryService) {
+  constructor(private readonly instanceService: CategoryService) {
     super();
   }
 
-  async createCategory(createInstanceDto: CreateCategoryDto) {
-    return await this.categoryService.createCategory(createInstanceDto);
+  async createInstance(createInstanceDto: CreateCategoryDto) {
+    return await this.instanceService.createInstance(createInstanceDto);
   }
 
-  async destroyCategory(categoryId: number) {
-    return await this.categoryService.deleteCategory({ where: { categoryId } });
+  async destroyInstance(categoryId: number) {
+    return await this.instanceService.deleteInstance({ where: { categoryId } });
   }
 
-  async updateCategory(
+  async updateInstance(
     categoryId: number,
     updateInstanceDto: UpdateCategoryDto
   ) {
-    const category = await this.categoryService.findCategoryById(categoryId);
-    if (!category) throw new ForbiddenException();
+    const instance = await this.instanceService.findInstanceById(categoryId);
+    if (!instance) throw new ForbiddenException();
 
     Object.keys(updateInstanceDto).forEach(
-      (data) => (category[data] = updateInstanceDto[data])
+      (data) => (instance[data] = updateInstanceDto[data])
     );
 
-    return await category.save();
+    return await instance.save();
   }
 
-  async getCategory(categoryId: number) {
-    return await this.categoryService.findCategoryById(categoryId);
+  async getInstance(categoryId: number) {
+    return await this.instanceService.findInstanceById(categoryId);
   }
 
-  async getAllCategories() {
-    return await this.categoryService.findCategories();
+  async getAllInstances() {
+    return await this.instanceService.findInstances();
   }
 }
