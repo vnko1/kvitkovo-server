@@ -3,12 +3,15 @@ import { ConfigModule } from "@nestjs/config";
 import { SequelizeModule } from "@nestjs/sequelize";
 
 import { User } from "./modules/user";
+import { Category, Color, Product, ProductType, Size } from "./modules/catalog";
 import {
   UserModule,
   AuthModule,
   TasksModule,
   MailModule,
   UsersModule,
+  CatalogModule,
+  CategoriesModule,
 } from "./modules";
 
 @Module({
@@ -25,7 +28,7 @@ import {
         retryAttempts: 2,
         synchronize: true,
         autoLoadModels: true,
-        models: [User],
+        models: [User, Category, Product, Color, Size, ProductType],
       }),
     }),
     MailModule,
@@ -33,6 +36,8 @@ import {
     UserModule,
     AuthModule,
     UsersModule,
+    CatalogModule,
+    CategoriesModule,
   ],
 })
 export class AppModule {}
