@@ -6,15 +6,14 @@ import {
   DataType,
   Default,
   ForeignKey,
+  HasMany,
   Model,
   PrimaryKey,
   Table,
 } from "sequelize-typescript";
 import { ProductStatusEnum } from "src/types";
-import { Category } from "./category.model";
-import { Color } from "./color.model";
-import { Size } from "./size.model";
-import { ProductType } from "./productType.model";
+
+import { Category, Image, Color, Size, ProductType } from ".";
 
 @Table
 export class Product extends Model {
@@ -81,20 +80,23 @@ export class Product extends Model {
   @Column
   colorId: number;
 
-  @BelongsTo(() => Color, { onDelete: "SET NULL", onUpdate: "CASCADE" })
+  @BelongsTo(() => Color, { onDelete: "CASCADE", onUpdate: "CASCADE" })
   color: Color;
 
   @ForeignKey(() => Size)
   @Column
   sizeId: number;
 
-  @BelongsTo(() => Size, { onDelete: "SET NULL", onUpdate: "CASCADE" })
+  @BelongsTo(() => Size, { onDelete: "CASCADE", onUpdate: "CASCADE" })
   size: Size;
 
   @ForeignKey(() => ProductType)
   @Column
   productTypeId: number;
 
-  @BelongsTo(() => ProductType, { onDelete: "SET NULL", onUpdate: "CASCADE" })
+  @BelongsTo(() => ProductType, { onDelete: "SCASCADE", onUpdate: "CASCADE" })
   productType: ProductType;
+
+  @HasMany(() => Image, { onDelete: "CASCADE", onUpdate: "CASCADE" })
+  images: Image[];
 }

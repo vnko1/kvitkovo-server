@@ -3,6 +3,7 @@ import { InjectModel } from "@nestjs/sequelize";
 import {
   CreateOptions,
   DestroyOptions,
+  FindAndCountOptions,
   FindOptions,
   Optional,
   UpdateOptions,
@@ -10,11 +11,11 @@ import {
 
 import { AppService } from "src/common/services";
 
-import { Size } from "../../models";
+import { Image } from "../../models";
 
 @Injectable()
-export class SizeService extends AppService {
-  constructor(@InjectModel(Size) private readonly model: typeof Size) {
+export class ImageService extends AppService {
+  constructor(@InjectModel(Image) private readonly model: typeof Image) {
     super();
   }
 
@@ -46,5 +47,9 @@ export class SizeService extends AppService {
 
   async findInstances(opt?: FindOptions) {
     return this.model.findAll(opt);
+  }
+
+  async findAndCountInstances(opt?: Omit<FindAndCountOptions<any>, "group">) {
+    return this.model.findAndCountAll(opt);
   }
 }

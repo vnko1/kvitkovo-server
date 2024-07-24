@@ -1,5 +1,6 @@
 export { MailModule } from "./mail/mail.module";
 export { TasksModule } from "./tasks/tasks.module";
+export { CloudsModule } from "./clouds/clouds.module";
 export { UserModule } from "./user/user.module";
 export { AuthModule } from "./auth/auth.module";
 export { UsersModule } from "./users/users.module";
@@ -9,4 +10,3 @@ export { ColorsModule } from "./colors/colors.module";
 export { SizesModule } from "./sizes/sizes.module";
 export { ProductTypesModule } from "./productTypes/productTypes.module";
 export { ProductsModule } from "./products/products.module";
-export { CloudsModule } from "./clouds/clouds.module";

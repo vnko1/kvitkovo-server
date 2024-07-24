@@ -15,9 +15,7 @@ import { Product } from "../../models";
 
 @Injectable()
 export class ProductService extends AppService {
-  constructor(
-    @InjectModel(Product) private readonly productModel: typeof Product
-  ) {
+  constructor(@InjectModel(Product) private readonly model: typeof Product) {
     super();
   }
 
@@ -25,33 +23,33 @@ export class ProductService extends AppService {
     values: T,
     opt?: CreateOptions
   ) {
-    return this.productModel.create(values, opt);
+    return this.model.create(values, opt);
   }
 
   async updateInstance<T extends Optional<any, string>>(
     values: T,
     opt?: UpdateOptions
   ) {
-    return this.productModel.update(values, opt);
+    return this.model.update(values, opt);
   }
 
   async deleteInstance(opt: DestroyOptions) {
-    return this.productModel.destroy(opt);
+    return this.model.destroy(opt);
   }
 
   async findInstance(opt?: FindOptions) {
-    return this.productModel.findOne(opt);
+    return this.model.findOne(opt);
   }
 
   async findInstanceById(pk: number, opt?: FindOptions) {
-    return this.productModel.findByPk(pk, opt);
+    return this.model.findByPk(pk, opt);
   }
 
   async findInstances(opt?: FindOptions) {
-    return this.productModel.findAll(opt);
+    return this.model.findAll(opt);
   }
 
   async findAndCountInstances(opt?: Omit<FindAndCountOptions<any>, "group">) {
-    return this.productModel.findAndCountAll(opt);
+    return this.model.findAndCountAll(opt);
   }
 }

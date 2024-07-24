@@ -14,7 +14,7 @@ import { Color } from "../../models";
 
 @Injectable()
 export class ColorService extends AppService {
-  constructor(@InjectModel(Color) private readonly colorModel: typeof Color) {
+  constructor(@InjectModel(Color) private readonly model: typeof Color) {
     super();
   }
 
@@ -22,29 +22,29 @@ export class ColorService extends AppService {
     values: T,
     opt?: CreateOptions
   ) {
-    return this.colorModel.create(values, opt);
+    return this.model.create(values, opt);
   }
 
   async updateInstance<T extends Optional<any, string>>(
     values: T,
     opt?: UpdateOptions
   ) {
-    return this.colorModel.update(values, opt);
+    return this.model.update(values, opt);
   }
 
   async deleteInstance(opt: DestroyOptions) {
-    return this.colorModel.destroy(opt);
+    return this.model.destroy(opt);
   }
 
   async findInstance(opt?: FindOptions) {
-    return this.colorModel.findOne(opt);
+    return this.model.findOne(opt);
   }
 
   async findInstanceById(pk: number, opt?: FindOptions) {
-    return this.colorModel.findByPk(pk, opt);
+    return this.model.findByPk(pk, opt);
   }
 
   async findInstances(opt?: FindOptions) {
-    return this.colorModel.findAll(opt);
+    return this.model.findAll(opt);
   }
 }

@@ -3,3 +3,4 @@ export * from "./product.model";
 export * from "./color.model";
 export * from "./size.model";
 export * from "./productType.model";
+export * from "./image.model";
