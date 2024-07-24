@@ -5,6 +5,7 @@ import { SequelizeModule } from "@nestjs/sequelize";
 import { User } from "./modules/user";
 import { Category, Color, Product, ProductType, Size } from "./modules/catalog";
 import {
+  CloudsModule,
   UserModule,
   AuthModule,
   TasksModule,
@@ -36,6 +37,7 @@ import {
       }),
     }),
     MailModule,
+    CloudsModule,
     TasksModule,
     UserModule,
     AuthModule,
