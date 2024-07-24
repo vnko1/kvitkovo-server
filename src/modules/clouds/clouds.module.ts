@@ -4,6 +4,6 @@ import { CloudsService, CloudsProvider } from ".";
 
 @Module({
   providers: [CloudsProvider, CloudsService],
-  exports: [CloudsProvider, CloudsService],
+  exports: [CloudsService],
 })
 export class CloudsModule {}

@@ -12,7 +12,7 @@ import { CloudsResponse, DeleteOptions } from "./clouds.type";
 
 @Injectable()
 export class CloudsService extends AppService {
-  private getPublicIdFromUrl(url: string, sliceValue: number = -4) {
+  private getPublicIdFromUrl(url: string, sliceValue: number = -3) {
     return url
       .split("/")
       .slice(sliceValue)

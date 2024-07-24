@@ -1,1 +1,1 @@
-export { ProductsController } from "./productTypes.controller";
+export { ProductsController } from "./products.controller";
