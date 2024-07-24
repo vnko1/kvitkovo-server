@@ -8,3 +8,4 @@ export { CategoriesModule } from "./categories/categories.module";
 export { ColorsModule } from "./colors/colors.module";
 export { SizesModule } from "./sizes/sizes.module";
 export { ProductTypesModule } from "./productTypes/productTypes.module";
+export { ProductsModule } from "./products/products.module";

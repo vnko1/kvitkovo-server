@@ -15,6 +15,7 @@ import {
   ColorsModule,
   SizesModule,
   ProductTypesModule,
+  ProductsModule,
 } from "./modules";
 
 @Module({
@@ -44,6 +45,7 @@ import {
     ColorsModule,
     SizesModule,
     ProductTypesModule,
+    ProductsModule,
   ],
 })
 export class AppModule {}
