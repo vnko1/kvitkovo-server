@@ -1,3 +1,3 @@
 export { ProductsController } from "./controller";
-export { ProductsService } from "./services";
+export { ProductsService, ImagesService } from "./services";
 export * from "./dto";

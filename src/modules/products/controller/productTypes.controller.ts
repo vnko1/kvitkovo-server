@@ -18,9 +18,12 @@ import {
 // import { ValidationPipe } from "src/common/pipes";
 
 import {} from "../dto";
-import { ProductsService } from "../services";
+import { ProductsService, ImagesService } from "../services";
 
 @Controller("product-types")
 export class ProductsController {
-  constructor(private readonly instanceService: ProductsService) {}
+  constructor(
+    private readonly productsService: ProductsService,
+    private readonly imagesService: ImagesService
+  ) {}
 }
