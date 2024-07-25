@@ -10,7 +10,7 @@ export const updateCategorySchema = z
     description: z.string().optional(),
     status: z.nativeEnum(CategoryStatusEnum).optional(),
     icon: z.nativeEnum(CategoryIconEnum).optional(),
-    sortValue: z.coerce.number().optional(),
+    sortValue: z.number().optional(),
   })
   .refine(
     (data) => {
