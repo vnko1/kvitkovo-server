@@ -21,7 +21,7 @@ export class ProductsService extends AppService {
     super();
   }
 
-  private getQueryOpt(queryDto: QueryDto) {
+  private getFilteredQueryOpt(queryDto: QueryDto) {
     const {
       offset,
       limit,
@@ -34,7 +34,6 @@ export class ProductsService extends AppService {
       types,
       discount,
       sort,
-      categoryId,
     } = queryDto;
     const queryOptions: any = {
       offset,
@@ -83,6 +82,72 @@ export class ProductsService extends AppService {
     if (discount !== undefined) {
       queryOptions.where.discount = discount ? { [Op.gt]: 0 } : { [Op.eq]: 0 };
     }
+
+    if (sort) {
+      switch (sort) {
+        case SortValuesEnum.ASC:
+          queryOptions.order = [["price", "ASC"]];
+          break;
+        case SortValuesEnum.DESC:
+          queryOptions.order = [["price", "DESC"]];
+          break;
+
+        default:
+          break;
+      }
+    }
+
+    return queryOptions;
+  }
+
+  private getDiscountedQuery(queryDto: QueryDto) {
+    const { offset, limit, sort } = queryDto;
+
+    const queryOptions: any = {
+      offset,
+      limit,
+      where: {},
+      include: [
+        { model: Category },
+        { model: Color },
+        { model: Size },
+        { model: ProductType },
+        { model: Image },
+      ],
+    };
+
+    if (sort) {
+      switch (sort) {
+        case SortValuesEnum.ASC:
+          queryOptions.order = [["price", "ASC"]];
+          break;
+        case SortValuesEnum.DESC:
+          queryOptions.order = [["price", "DESC"]];
+          break;
+
+        default:
+          break;
+      }
+    }
+
+    return queryOptions;
+  }
+
+  private getCategoryQuery(queryDto: QueryDto) {
+    const { offset, limit, sort, categoryId } = queryDto;
+
+    const queryOptions: any = {
+      offset,
+      limit,
+      where: {},
+      include: [
+        { model: Category },
+        { model: Color },
+        { model: Size },
+        { model: ProductType },
+        { model: Image },
+      ],
+    };
 
     if (categoryId) {
       queryOptions.where.categoryId = categoryId;
@@ -138,7 +203,7 @@ export class ProductsService extends AppService {
 
   async getFilteredProducts(queryDto: QueryDto) {
     return await this.instanceService.findAndCountInstances(
-      this.getQueryOpt(queryDto)
+      this.getFilteredQueryOpt(queryDto)
     );
   }
 
@@ -146,7 +211,7 @@ export class ProductsService extends AppService {
     queryDto: Pick<QueryDto, "limit" | "offset" | "sort">
   ) {
     return await this.instanceService.findAndCountInstances(
-      this.getQueryOpt(queryDto)
+      this.getDiscountedQuery(queryDto)
     );
   }
 
@@ -154,7 +219,7 @@ export class ProductsService extends AppService {
     queryDto: Pick<QueryDto, "limit" | "offset" | "sort" | "categoryId">
   ) {
     return await this.instanceService.findAndCountInstances(
-      this.getQueryOpt(queryDto)
+      this.getCategoryQuery(queryDto)
     );
   }
 }
