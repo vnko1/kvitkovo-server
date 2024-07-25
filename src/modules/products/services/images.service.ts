@@ -7,9 +7,11 @@ import { UploadApiOptions } from "cloudinary";
 import { randomUUID } from "crypto";
 
 import { AppService } from "src/common/services";
+
 import { ImageService } from "src/modules/catalog";
 import { CloudsService } from "src/modules/clouds";
-import { CreateImageDto } from "../dto/createImage.dto";
+
+import { CreateImageDto } from "../dto";
 
 @Injectable()
 export class ImagesService extends AppService {
@@ -79,7 +81,7 @@ export class ImagesService extends AppService {
     return await this.cloudsService.delete(instance.url);
   }
 
-  async mainImageToggle(imageId: number) {
+  async toggleMainImage(imageId: number) {
     const instance = await this.instanceService.findInstanceById(imageId);
     if (!instance) throw new ForbiddenException();
 
@@ -88,7 +90,7 @@ export class ImagesService extends AppService {
     return await instance.save();
   }
 
-  async getProductsImage(productId: number) {
+  async getProductImages(productId: number) {
     return await this.instanceService.findInstances({ where: { productId } });
   }
 
