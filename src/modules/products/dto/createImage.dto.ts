@@ -3,7 +3,7 @@ import { ACCEPTED_IMAGE_TYPES, MAX_FILE_SIZE } from "src/utils";
 
 export const createImageSchema = z
   .object({
-    productId: z.number({ required_error: "ProductId is required" }),
+    productId: z.coerce.number({ required_error: "ProductId is required" }),
     name: z.string({ required_error: "Name is required" }),
     mainImage: z.boolean().optional(),
     file: z
