@@ -14,9 +14,7 @@ import { Category } from "../../models";
 
 @Injectable()
 export class CategoryService extends AppService {
-  constructor(
-    @InjectModel(Category) private readonly categoryModel: typeof Category
-  ) {
+  constructor(@InjectModel(Category) private readonly model: typeof Category) {
     super();
   }
 
@@ -24,29 +22,29 @@ export class CategoryService extends AppService {
     values: T,
     opt?: CreateOptions
   ) {
-    return this.categoryModel.create(values, opt);
+    return this.model.create(values, opt);
   }
 
   async updateInstance<T extends Optional<any, string>>(
     values: T,
     opt?: UpdateOptions
   ) {
-    return this.categoryModel.update(values, opt);
+    return this.model.update(values, opt);
   }
 
   async deleteInstance(opt: DestroyOptions) {
-    return this.categoryModel.destroy(opt);
+    return this.model.destroy(opt);
   }
 
   async findInstance(opt?: FindOptions) {
-    return this.categoryModel.findOne(opt);
+    return this.model.findOne(opt);
   }
 
   async findInstanceById(pk: number, opt?: FindOptions) {
-    return this.categoryModel.findByPk(pk, opt);
+    return this.model.findByPk(pk, opt);
   }
 
   async findInstances(opt?: FindOptions) {
-    return this.categoryModel.findAll(opt);
+    return this.model.findAll(opt);
   }
 }

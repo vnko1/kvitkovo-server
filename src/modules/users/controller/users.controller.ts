@@ -21,7 +21,7 @@ import { paginationDefaultValues } from "src/utils";
 import { RolesEnum, StatusEnum } from "src/types";
 
 import { Rights, Roles, UserData } from "src/common/decorators";
-import { ValidationPipe } from "src/common/pipes";
+import { BodyValidationPipe } from "src/common/pipes";
 
 import { UsersService } from "../services";
 import { ProfileGuard } from "../guards";
@@ -121,7 +121,7 @@ export class UsersController {
 
   @Post("user")
   @Roles(RolesEnum.ADMIN)
-  @UsePipes(new ValidationPipe(createUserSchema))
+  @UsePipes(new BodyValidationPipe(createUserSchema))
   async createUser(@Body() createUserDto: CreateUserDto) {
     return await this.usersService.createUser(createUserDto);
   }
@@ -138,7 +138,7 @@ export class UsersController {
   }
 
   @Post("reset-pass")
-  @UsePipes(new ValidationPipe(changeResetPasswordSchema))
+  @UsePipes(new BodyValidationPipe(changeResetPasswordSchema))
   @HttpCode(HttpStatus.NO_CONTENT)
   async updateResetPassword(
     @Body() changeResetPasswordDto: ChangeResetPasswordDto
@@ -147,7 +147,7 @@ export class UsersController {
   }
 
   @Post("change-pass")
-  @UsePipes(new ValidationPipe(changePasswordSchema))
+  @UsePipes(new BodyValidationPipe(changePasswordSchema))
   @HttpCode(HttpStatus.NO_CONTENT)
   async changePassword(
     @UserData("userId") userId: number,
@@ -160,7 +160,7 @@ export class UsersController {
   @Roles(RolesEnum.USER, RolesEnum.ADMIN, RolesEnum.MANAGER)
   @Rights(RolesEnum.USER, RolesEnum.MANAGER)
   @UseGuards(ProfileGuard)
-  @UsePipes(new ValidationPipe(updateUserSchema))
+  @UsePipes(new BodyValidationPipe(updateUserSchema))
   async updateUser(
     @Param("userId", ParseIntPipe) userId: number,
     @Body() updateUserDto: UpdateUserDto,
@@ -173,7 +173,7 @@ export class UsersController {
   @Roles(RolesEnum.ADMIN, RolesEnum.MANAGER)
   @Rights(RolesEnum.MANAGER)
   @UseGuards(ProfileGuard)
-  @UsePipes(new ValidationPipe(updateEmployeesSchema))
+  @UsePipes(new BodyValidationPipe(updateEmployeesSchema))
   async updateEmployees(
     @Param("userId", ParseIntPipe) userId: number,
     @Body() updateEmployeesDto: UpdateEmployeesDto,

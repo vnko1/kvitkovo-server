@@ -15,7 +15,7 @@ import {
 import { RolesEnum } from "src/types";
 
 import { Public, Roles } from "src/common/decorators";
-import { ValidationPipe } from "src/common/pipes";
+import { BodyValidationPipe } from "src/common/pipes";
 
 import {
   CreateProductTypesDto,
@@ -30,7 +30,7 @@ export class ProductTypesController {
   constructor(private readonly instanceService: ProductTypesService) {}
   @Post()
   @Roles(RolesEnum.ADMIN, RolesEnum.MANAGER)
-  @UsePipes(new ValidationPipe(createProductTypesSchema))
+  @UsePipes(new BodyValidationPipe(createProductTypesSchema))
   async createInstance(@Body() createInstanceDto: CreateProductTypesDto) {
     return await this.instanceService.createInstance(createInstanceDto);
   }
@@ -46,7 +46,7 @@ export class ProductTypesController {
 
   @Put(":productTypeId")
   @Roles(RolesEnum.ADMIN, RolesEnum.MANAGER)
-  @UsePipes(new ValidationPipe(updateProductTypesSchema))
+  @UsePipes(new BodyValidationPipe(updateProductTypesSchema))
   async updateInstance(
     @Param("productTypeId", ParseIntPipe) productTypeId: number,
     @Body() updateInstanceDto: UpdateProductTypesDto

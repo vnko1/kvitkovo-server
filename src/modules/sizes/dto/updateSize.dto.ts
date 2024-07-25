@@ -1,16 +1,11 @@
 import { z } from "zod";
 
-import { CategoryIconEnum, CategoryStatusEnum } from "src/types";
-
 export const updateSizeSchema = z
   .object({
     name: z.string().optional(),
-    metaDescription: z.string().optional(),
-    metaKeywords: z.string().optional(),
-    description: z.string().optional(),
-    status: z.nativeEnum(CategoryStatusEnum).optional(),
-    icon: z.nativeEnum(CategoryIconEnum).optional(),
-    sortValue: z.coerce.number().optional(),
+    alias: z.string().optional(),
+    min: z.number().optional(),
+    max: z.number().optional(),
   })
   .refine(
     (data) => {

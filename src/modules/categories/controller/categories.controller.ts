@@ -15,7 +15,7 @@ import {
 import { RolesEnum } from "src/types";
 
 import { Public, Roles } from "src/common/decorators";
-import { ValidationPipe } from "src/common/pipes";
+import { BodyValidationPipe } from "src/common/pipes";
 
 import {
   CreateCategoryDto,
@@ -30,7 +30,7 @@ export class CategoriesController {
   constructor(private readonly instanceService: CategoriesService) {}
   @Post()
   @Roles(RolesEnum.ADMIN, RolesEnum.MANAGER)
-  @UsePipes(new ValidationPipe(createCategorySchema))
+  @UsePipes(new BodyValidationPipe(createCategorySchema))
   async createInstance(@Body() createInstanceDto: CreateCategoryDto) {
     return await this.instanceService.createInstance(createInstanceDto);
   }
@@ -44,7 +44,7 @@ export class CategoriesController {
 
   @Put(":categoryId")
   @Roles(RolesEnum.ADMIN, RolesEnum.MANAGER)
-  @UsePipes(new ValidationPipe(updateCategorySchema))
+  @UsePipes(new BodyValidationPipe(updateCategorySchema))
   async updateInstance(
     @Param("categoryId", ParseIntPipe) categoryId: number,
     @Body() updateInstanceDto: UpdateCategoryDto

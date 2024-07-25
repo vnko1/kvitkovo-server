@@ -16,7 +16,7 @@ import { Request, Response } from "express";
 
 import { RolesEnum, StatusEnum } from "src/types";
 import { Public } from "src/common/decorators";
-import { ValidationPipe } from "src/common/pipes";
+import { BodyValidationPipe } from "src/common/pipes";
 
 import {
   RegisterDto,
@@ -36,7 +36,7 @@ export class AuthController {
 
   @Post("admin/register")
   @Public()
-  @UsePipes(new ValidationPipe(registerSchema))
+  @UsePipes(new BodyValidationPipe(registerSchema))
   async adminRegister(@Body() registerDto: RegisterDto) {
     if (registerDto.password !== this.adminCred) throw new ForbiddenException();
     return await this.authService.register(
@@ -48,7 +48,7 @@ export class AuthController {
 
   @Post("register")
   @Public()
-  @UsePipes(new ValidationPipe(registerSchema))
+  @UsePipes(new BodyValidationPipe(registerSchema))
   @HttpCode(HttpStatus.NO_CONTENT)
   async register(@Body() registerDto: RegisterDto) {
     return await this.authService.register(registerDto);
@@ -56,7 +56,7 @@ export class AuthController {
 
   @Get("confirm/reset")
   @Public()
-  @UsePipes(new ValidationPipe(resetCodeSchema))
+  @UsePipes(new BodyValidationPipe(resetCodeSchema))
   @HttpCode(HttpStatus.NO_CONTENT)
   async resetVerificationCode(@Body() resetCodeDto: ResetCodeDto) {
     return await this.authService.resetCode(resetCodeDto);
@@ -70,7 +70,7 @@ export class AuthController {
 
   @Post("login")
   @Public()
-  @UsePipes(new ValidationPipe(loginSchema))
+  @UsePipes(new BodyValidationPipe(loginSchema))
   async login(@Body() loginDto: LoginDto) {
     return await this.authService.login(loginDto);
   }

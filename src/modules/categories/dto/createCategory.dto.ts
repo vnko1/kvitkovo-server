@@ -20,7 +20,7 @@ export const createCategorySchema = z
     icon: z.nativeEnum(CategoryIconEnum, {
       required_error: "Icon is required",
     }),
-    sortValue: z.coerce.number({
+    sortValue: z.number({
       required_error: "Sort value is required",
     }),
   })

@@ -3,18 +3,27 @@ import { ConfigModule } from "@nestjs/config";
 import { SequelizeModule } from "@nestjs/sequelize";
 
 import { User } from "./modules/user";
-import { Category, Color, Product, ProductType, Size } from "./modules/catalog";
 import {
-  UserModule,
-  AuthModule,
+  Category,
+  Color,
+  Product,
+  ProductType,
+  Size,
+  Image,
+} from "./modules/catalog";
+import {
+  CloudsModule,
   TasksModule,
   MailModule,
+  UserModule,
+  AuthModule,
   UsersModule,
   CatalogModule,
   CategoriesModule,
   ColorsModule,
   SizesModule,
   ProductTypesModule,
+  ProductsModule,
 } from "./modules";
 
 @Module({
@@ -31,10 +40,11 @@ import {
         retryAttempts: 2,
         synchronize: true,
         autoLoadModels: true,
-        models: [User, Category, Product, Color, Size, ProductType],
+        models: [User, Category, Product, Color, Size, ProductType, Image],
       }),
     }),
     MailModule,
+    CloudsModule,
     TasksModule,
     UserModule,
     AuthModule,
@@ -44,6 +54,7 @@ import {
     ColorsModule,
     SizesModule,
     ProductTypesModule,
+    ProductsModule,
   ],
 })
 export class AppModule {}

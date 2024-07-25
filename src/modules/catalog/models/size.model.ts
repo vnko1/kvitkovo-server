@@ -19,6 +19,15 @@ export class Size extends Model {
   @Column({ type: DataType.STRING })
   name: string;
 
+  @Column({ type: DataType.STRING })
+  alias: string;
+
+  @Column({ type: DataType.INTEGER })
+  min: number;
+
+  @Column({ type: DataType.INTEGER })
+  max: number;
+
   @HasMany(() => Product)
   products: Product[];
 }

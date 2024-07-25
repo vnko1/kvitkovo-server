@@ -14,7 +14,7 @@ import { Size } from "../../models";
 
 @Injectable()
 export class SizeService extends AppService {
-  constructor(@InjectModel(Size) private readonly sizeModel: typeof Size) {
+  constructor(@InjectModel(Size) private readonly model: typeof Size) {
     super();
   }
 
@@ -22,29 +22,29 @@ export class SizeService extends AppService {
     values: T,
     opt?: CreateOptions
   ) {
-    return this.sizeModel.create(values, opt);
+    return this.model.create(values, opt);
   }
 
   async updateInstance<T extends Optional<any, string>>(
     values: T,
     opt?: UpdateOptions
   ) {
-    return this.sizeModel.update(values, opt);
+    return this.model.update(values, opt);
   }
 
   async deleteInstance(opt: DestroyOptions) {
-    return this.sizeModel.destroy(opt);
+    return this.model.destroy(opt);
   }
 
   async findInstance(opt?: FindOptions) {
-    return this.sizeModel.findOne(opt);
+    return this.model.findOne(opt);
   }
 
   async findInstanceById(pk: number, opt?: FindOptions) {
-    return this.sizeModel.findByPk(pk, opt);
+    return this.model.findByPk(pk, opt);
   }
 
   async findInstances(opt?: FindOptions) {
-    return this.sizeModel.findAll(opt);
+    return this.model.findAll(opt);
   }
 }

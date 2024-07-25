@@ -19,6 +19,9 @@ export class ProductType extends Model {
   @Column({ type: DataType.STRING })
   name: string;
 
+  @Column({ type: DataType.STRING })
+  alias: string;
+
   @HasMany(() => Product)
   products: Product[];
 }
