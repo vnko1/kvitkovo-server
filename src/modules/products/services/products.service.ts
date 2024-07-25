@@ -14,42 +14,49 @@ export class ProductsService extends AppService {
   }
 
   async createProduct(createInstanceDto: CreateProductDto) {
-    return createInstanceDto;
+    return await this.instanceService.createInstance(createInstanceDto);
   }
 
   async updateProduct(productId: number, updateInstanceDto: UpdateProductDto) {
-    return { updateInstanceDto, productId };
+    const instance = await this.instanceService.findInstanceById(productId);
+
+    Object.keys(updateInstanceDto).forEach(
+      (data) => (instance[data] = updateInstanceDto[data])
+    );
+    return await instance.save();
   }
 
   async toggleProductStatus(productId: number) {
-    return productId;
+    const instance = await this.instanceService.findInstanceById(productId);
+    instance.available = !instance.available;
+    return await instance.save();
   }
 
   async deleteProduct(productId: number) {
-    return productId;
+    return await this.instanceService.deleteInstance({ where: { productId } });
   }
 
   async getProduct(productId: number) {
-    return productId;
+    return await this.instanceService.findInstanceById(productId);
   }
 
   async getAllProducts() {
-    return 1;
+    return await this.instanceService.findInstances();
   }
 
   async getFilteredProducts(queryDto: QueryDto) {
-    return queryDto;
+    return await this.instanceService.findAndCountInstances();
   }
 
   async getDiscountedProducts(
     queryDto: Pick<QueryDto, "limit" | "offset" | "sort">
   ) {
-    return queryDto;
+    return await this.instanceService.findAndCountInstances();
   }
 
   async getProductsByCategory(
     queryDto: Pick<QueryDto, "limit" | "offset" | "sort" | "categoryId">
   ) {
-    return queryDto;
+    return await this.instanceService.findAndCountInstances();
   }
 }
