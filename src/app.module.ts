@@ -11,6 +11,7 @@ import {
   Size,
   Image,
 } from "./modules/catalog";
+import { Shop } from "./modules/shop";
 import {
   CloudsModule,
   TasksModule,
@@ -24,6 +25,8 @@ import {
   SizesModule,
   ProductTypesModule,
   ProductsModule,
+  ShopModule,
+  ShopsModule,
 } from "./modules";
 
 @Module({
@@ -40,7 +43,16 @@ import {
         retryAttempts: 2,
         synchronize: true,
         autoLoadModels: true,
-        models: [User, Category, Product, Color, Size, ProductType, Image],
+        models: [
+          User,
+          Category,
+          Product,
+          Color,
+          Size,
+          ProductType,
+          Image,
+          Shop,
+        ],
       }),
     }),
     MailModule,
@@ -55,6 +67,8 @@ import {
     SizesModule,
     ProductTypesModule,
     ProductsModule,
+    ShopModule,
+    ShopsModule,
   ],
 })
 export class AppModule {}
