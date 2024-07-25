@@ -12,7 +12,7 @@ export const querySchema = z.object({
   colors: z.array(z.coerce.number()).optional(),
   sizes: z.array(z.coerce.number()).optional(),
   types: z.array(z.coerce.number()).optional(),
-  discount: z.boolean().optional(),
+  discount: z.coerce.boolean().optional(),
   sort: z.nativeEnum(SortValuesEnum).optional(),
   categoryId: z.coerce.number().optional(),
 });
