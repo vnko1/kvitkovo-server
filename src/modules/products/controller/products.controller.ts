@@ -21,8 +21,8 @@ import { diskStorage } from "multer";
 import { RolesEnum } from "src/types";
 import { multerConfig } from "src/utils";
 
-import { ValidationPipe } from "src/common/pipes";
-import { QueryDto } from "src/common/dto";
+import { QueryValidationPipe, BodyValidationPipe } from "src/common/pipes";
+import { QueryDto, querySchema } from "src/common/dto";
 import { Roles } from "src/common/decorators";
 
 import { ProductsService, ImagesService } from "../services";
@@ -44,7 +44,7 @@ export class ProductsController {
 
   @Post("product")
   @Roles(RolesEnum.ADMIN, RolesEnum.MANAGER)
-  @UsePipes(new ValidationPipe(createProductSchema))
+  @UsePipes(new BodyValidationPipe(createProductSchema))
   async createProduct(@Body() createInstanceDto: CreateProductDto) {
     return await this.productsService.createProduct(createInstanceDto);
   }
@@ -58,7 +58,7 @@ export class ProductsController {
 
   @Put("product/:productId")
   @Roles(RolesEnum.ADMIN, RolesEnum.MANAGER)
-  @UsePipes(new ValidationPipe(updateProductSchema))
+  @UsePipes(new BodyValidationPipe(updateProductSchema))
   async updateProduct(
     @Param("productId", ParseIntPipe) productId: number,
     @Body() updateInstanceDto: UpdateProductDto
@@ -88,6 +88,7 @@ export class ProductsController {
   }
 
   @Get("filter")
+  @UsePipes(new QueryValidationPipe(querySchema))
   async getFilteredProducts(@Query() query: QueryDto) {
     return await this.productsService.getFilteredProducts(query);
   }

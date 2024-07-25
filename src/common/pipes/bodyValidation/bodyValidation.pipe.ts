@@ -5,7 +5,7 @@ import {
 } from "@nestjs/common";
 import { ZodSchema } from "zod";
 
-export class ValidationPipe implements PipeTransform {
+export class BodyValidationPipe implements PipeTransform {
   constructor(private schema: ZodSchema) {}
 
   transform(value: unknown, metadata: ArgumentMetadata) {

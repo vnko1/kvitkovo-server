@@ -15,7 +15,7 @@ import {
 import { RolesEnum } from "src/types";
 
 import { Public, Roles } from "src/common/decorators";
-import { ValidationPipe } from "src/common/pipes";
+import { BodyValidationPipe } from "src/common/pipes";
 
 import {
   CreateColorDto,
@@ -30,7 +30,7 @@ export class ColorsController {
   constructor(private readonly colorsService: ColorsService) {}
   @Post()
   @Roles(RolesEnum.ADMIN, RolesEnum.MANAGER)
-  @UsePipes(new ValidationPipe(createColorSchema))
+  @UsePipes(new BodyValidationPipe(createColorSchema))
   async createInstance(@Body() createInstanceDto: CreateColorDto) {
     return await this.colorsService.createInstance(createInstanceDto);
   }
@@ -44,7 +44,7 @@ export class ColorsController {
 
   @Put(":colorId")
   @Roles(RolesEnum.ADMIN, RolesEnum.MANAGER)
-  @UsePipes(new ValidationPipe(updateColorSchema))
+  @UsePipes(new BodyValidationPipe(updateColorSchema))
   async updateInstance(
     @Param("colorId", ParseIntPipe) colorId: number,
     @Body() updateInstanceDto: UpdateColorDto

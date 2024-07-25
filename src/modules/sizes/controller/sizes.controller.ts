@@ -15,7 +15,7 @@ import {
 import { RolesEnum } from "src/types";
 
 import { Public, Roles } from "src/common/decorators";
-import { ValidationPipe } from "src/common/pipes";
+import { BodyValidationPipe } from "src/common/pipes";
 
 import {
   CreateSizeDto,
@@ -30,7 +30,7 @@ export class SizesController {
   constructor(private readonly instanceService: SizesService) {}
   @Post()
   @Roles(RolesEnum.ADMIN, RolesEnum.MANAGER)
-  @UsePipes(new ValidationPipe(createSizeSchema))
+  @UsePipes(new BodyValidationPipe(createSizeSchema))
   async createInstance(@Body() createInstanceDto: CreateSizeDto) {
     return await this.instanceService.createInstance(createInstanceDto);
   }
@@ -44,7 +44,7 @@ export class SizesController {
 
   @Put(":sizeId")
   @Roles(RolesEnum.ADMIN, RolesEnum.MANAGER)
-  @UsePipes(new ValidationPipe(updateSizeSchema))
+  @UsePipes(new BodyValidationPipe(updateSizeSchema))
   async updateInstance(
     @Param("sizeId", ParseIntPipe) sizeId: number,
     @Body() updateInstanceDto: UpdateSizeDto
