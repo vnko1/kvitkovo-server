@@ -1,9 +1,11 @@
 import { Injectable } from "@nestjs/common";
 
 import { AppService } from "src/common/services";
+import { QueryDto } from "src/common/dto";
+
 import { ProductService } from "src/modules/catalog";
 
-import { CreateProductDto, QueryDto, UpdateProductDto } from "../dto";
+import { CreateProductDto, UpdateProductDto } from "../dto";
 
 @Injectable()
 export class ProductsService extends AppService {

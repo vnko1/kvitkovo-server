@@ -22,7 +22,7 @@ import { RolesEnum } from "src/types";
 import { multerConfig } from "src/utils";
 
 import { ValidationPipe } from "src/common/pipes";
-
+import { QueryDto } from "src/common/dto";
 import { Roles } from "src/common/decorators";
 
 import { ProductsService, ImagesService } from "../services";
@@ -31,7 +31,6 @@ import {
   createImageSchema,
   CreateProductDto,
   createProductSchema,
-  QueryDto,
   UpdateProductDto,
   updateProductSchema,
 } from "../dto";
