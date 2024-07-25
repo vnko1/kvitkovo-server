@@ -20,6 +20,6 @@ export enum CategoryIconEnum {
 }
 
 export enum SortValuesEnum {
-  ASC = "asc",
-  DESC = "desc",
+  ASC = "ASC",
+  DESC = "DESC",
 }

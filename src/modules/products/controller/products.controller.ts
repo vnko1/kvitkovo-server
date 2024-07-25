@@ -12,6 +12,8 @@ import {
   UseInterceptors,
   UploadedFile,
   BadRequestException,
+  UsePipes,
+  Query,
 } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { diskStorage } from "multer";
@@ -19,10 +21,20 @@ import { diskStorage } from "multer";
 import { RolesEnum } from "src/types";
 import { multerConfig } from "src/utils";
 
+import { ValidationPipe } from "src/common/pipes";
+
 import { Roles } from "src/common/decorators";
 
 import { ProductsService, ImagesService } from "../services";
-import { CreateImageDto, createImageSchema } from "../dto";
+import {
+  CreateImageDto,
+  createImageSchema,
+  CreateProductDto,
+  createProductSchema,
+  QueryDto,
+  UpdateProductDto,
+  updateProductSchema,
+} from "../dto";
 
 @Controller("products")
 export class ProductsController {
@@ -30,6 +42,66 @@ export class ProductsController {
     private readonly productsService: ProductsService,
     private readonly imagesService: ImagesService
   ) {}
+
+  @Post()
+  @Roles(RolesEnum.ADMIN, RolesEnum.MANAGER)
+  @UsePipes(new ValidationPipe(createProductSchema))
+  async createProduct(@Body() createInstanceDto: CreateProductDto) {
+    return await this.productsService.createProduct(createInstanceDto);
+  }
+
+  @Delete(":productId")
+  @Roles(RolesEnum.ADMIN, RolesEnum.MANAGER)
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async deleteProduct(@Param("productId", ParseIntPipe) productId: number) {
+    return await this.productsService.deleteProduct(productId);
+  }
+
+  @Put(":productId")
+  @Roles(RolesEnum.ADMIN, RolesEnum.MANAGER)
+  @UsePipes(new ValidationPipe(updateProductSchema))
+  async updateProduct(
+    @Param("productId", ParseIntPipe) productId: number,
+    @Body() updateInstanceDto: UpdateProductDto
+  ) {
+    return await this.productsService.updateProduct(
+      productId,
+      updateInstanceDto
+    );
+  }
+
+  @Put(":productId/status")
+  @Roles(RolesEnum.ADMIN, RolesEnum.MANAGER)
+  async updateProductStatus(
+    @Param("productId", ParseIntPipe) productId: number
+  ) {
+    return await this.productsService.toggleProductStatus(productId);
+  }
+
+  @Get(":productId")
+  async getProductBtId(@Param("productId", ParseIntPipe) productId: number) {
+    return await this.productsService.getProduct(productId);
+  }
+
+  @Get()
+  async getAllProducts() {
+    return await this.productsService.getAllProducts();
+  }
+
+  @Get("filter")
+  async getFilteredProducts(@Query() query: QueryDto) {
+    return await this.productsService.getFilteredProducts(query);
+  }
+
+  @Get("discounted")
+  async getDiscountedProducts(@Query() query: QueryDto) {
+    return await this.productsService.getDiscountedProducts(query);
+  }
+
+  @Get("category")
+  async getProductsByCategory(@Query() query: QueryDto) {
+    return await this.productsService.getProductsByCategory(query);
+  }
 
   @Post("images")
   @Roles(RolesEnum.ADMIN, RolesEnum.MANAGER)

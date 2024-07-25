@@ -69,6 +69,10 @@ export class Product extends Model {
   @Column({ type: DataType.BOOLEAN })
   allowAddToConstructor: boolean;
 
+  @Default(true)
+  @Column({ type: DataType.BOOLEAN })
+  available: boolean;
+
   @ForeignKey(() => Category)
   @Column
   categoryId: number;
