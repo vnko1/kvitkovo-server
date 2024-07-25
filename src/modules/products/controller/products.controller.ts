@@ -42,21 +42,21 @@ export class ProductsController {
     private readonly imagesService: ImagesService
   ) {}
 
-  @Post()
+  @Post("product")
   @Roles(RolesEnum.ADMIN, RolesEnum.MANAGER)
   @UsePipes(new ValidationPipe(createProductSchema))
   async createProduct(@Body() createInstanceDto: CreateProductDto) {
     return await this.productsService.createProduct(createInstanceDto);
   }
 
-  @Delete(":productId")
+  @Delete("product/:productId")
   @Roles(RolesEnum.ADMIN, RolesEnum.MANAGER)
   @HttpCode(HttpStatus.NO_CONTENT)
   async deleteProduct(@Param("productId", ParseIntPipe) productId: number) {
     return await this.productsService.deleteProduct(productId);
   }
 
-  @Put(":productId")
+  @Put("product/:productId")
   @Roles(RolesEnum.ADMIN, RolesEnum.MANAGER)
   @UsePipes(new ValidationPipe(updateProductSchema))
   async updateProduct(
@@ -69,7 +69,7 @@ export class ProductsController {
     );
   }
 
-  @Put(":productId/status")
+  @Put("product/:productId/status")
   @Roles(RolesEnum.ADMIN, RolesEnum.MANAGER)
   async updateProductStatus(
     @Param("productId", ParseIntPipe) productId: number
@@ -77,7 +77,7 @@ export class ProductsController {
     return await this.productsService.toggleProductStatus(productId);
   }
 
-  @Get(":productId")
+  @Get("product/:productId")
   async getProductBtId(@Param("productId", ParseIntPipe) productId: number) {
     return await this.productsService.getProduct(productId);
   }
