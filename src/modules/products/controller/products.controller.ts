@@ -23,7 +23,7 @@ import { multerConfig } from "src/utils";
 
 import { QueryValidationPipe, BodyValidationPipe } from "src/common/pipes";
 import { QueryDto, querySchema } from "src/common/dto";
-import { Roles } from "src/common/decorators";
+import { Public, Roles } from "src/common/decorators";
 
 import { ProductsService, ImagesService } from "../services";
 import {
@@ -78,28 +78,33 @@ export class ProductsController {
   }
 
   @Get("product/:productId")
+  @Public()
   async getProductBtId(@Param("productId", ParseIntPipe) productId: number) {
     return await this.productsService.getProduct(productId);
   }
 
   @Get()
+  @Public()
   async getAllProducts() {
     return await this.productsService.getAllProducts();
   }
 
   @Get("filter")
+  @Public()
   @UsePipes(new QueryValidationPipe(querySchema))
   async getFilteredProducts(@Query() query: QueryDto) {
     return await this.productsService.getFilteredProducts(query);
   }
 
   @Get("discounted")
+  @Public()
   @UsePipes(new QueryValidationPipe(querySchema))
   async getDiscountedProducts(@Query() query: QueryDto) {
     return await this.productsService.getDiscountedProducts(query);
   }
 
   @Get("category")
+  @Public()
   @UsePipes(new QueryValidationPipe(querySchema))
   async getProductsByCategory(@Query() query: QueryDto) {
     return await this.productsService.getProductsByCategory(query);
@@ -146,6 +151,7 @@ export class ProductsController {
   }
 
   @Get(":productId/images")
+  @Public()
   async getAllProductImages(
     @Param("productId", ParseIntPipe) productId: number
   ) {
@@ -153,6 +159,7 @@ export class ProductsController {
   }
 
   @Get("/images/:imageId")
+  @Public()
   async getImage(@Param("imageId", ParseIntPipe) imageId: number) {
     return await this.imagesService.getImage(imageId);
   }
