@@ -94,11 +94,13 @@ export class ProductsController {
   }
 
   @Get("discounted")
+  @UsePipes(new QueryValidationPipe(querySchema))
   async getDiscountedProducts(@Query() query: QueryDto) {
     return await this.productsService.getDiscountedProducts(query);
   }
 
   @Get("category")
+  @UsePipes(new QueryValidationPipe(querySchema))
   async getProductsByCategory(@Query() query: QueryDto) {
     return await this.productsService.getProductsByCategory(query);
   }
