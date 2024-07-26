@@ -57,7 +57,7 @@ export class AuthService extends AppService {
     roles: RolesEnum = RolesEnum.USER,
     status: StatusEnum = StatusEnum.INACTIVE
   ) {
-    const user = await this.userService.createUser({
+    const user = await this.userService.add({
       ...registerDto,
       provider: "local",
       roles,
@@ -77,7 +77,7 @@ export class AuthService extends AppService {
   }
 
   async resetCode({ email }: ResetCodeDto) {
-    const user = await this.userService.findUser({ where: { email } });
+    const user = await this.userService.findOne({ where: { email } });
 
     if (!user || user.status === StatusEnum.ACTIVE)
       throw new ForbiddenException();
@@ -86,7 +86,7 @@ export class AuthService extends AppService {
   }
 
   async confirmEmail(verificationCode: string) {
-    const user = await this.userService.findUser({
+    const user = await this.userService.findOne({
       where: { verificationCode },
     });
 
@@ -103,9 +103,12 @@ export class AuthService extends AppService {
   }
 
   async login(loginDto: LoginDto) {
-    const user = await this.userService.findUser({
-      where: { email: loginDto.email },
-    });
+    const user = await this.userService.findOne(
+      {
+        where: { email: loginDto.email },
+      },
+      "adminScope"
+    );
 
     if (!user) throw new UnauthorizedException();
 
@@ -128,7 +131,7 @@ export class AuthService extends AppService {
   }
 
   async googleLogin(googleProfile: GoogleProfile) {
-    const [user] = await this.userService.findOrCreateUser(
+    const [user] = await this.userService.findOrCreate(
       {
         where: { email: googleProfile.email },
         defaults: googleProfile,

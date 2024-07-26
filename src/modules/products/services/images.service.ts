@@ -51,14 +51,14 @@ export class ImagesService extends AppService {
 
   async createInstance({ file, ...restInstanceDto }: CreateImageDto) {
     const imageRes = await this.uploadImage(file);
-    return await this.instanceService.createInstance({
+    return await this.instanceService.add({
       ...restInstanceDto,
       ...imageRes,
     });
   }
 
   async deleteAllProductsImages(productId: number) {
-    const instances = await this.instanceService.findInstances({
+    const instances = await this.instanceService.findAll({
       where: { productId },
     });
 
@@ -75,14 +75,14 @@ export class ImagesService extends AppService {
   }
 
   async deleteImage(imageId: number) {
-    const instance = await this.instanceService.findInstanceById(imageId);
+    const instance = await this.instanceService.findByPk(imageId);
     if (!instance) throw new ForbiddenException();
 
     return await this.cloudsService.delete(instance.url);
   }
 
   async toggleMainImage(imageId: number) {
-    const instance = await this.instanceService.findInstanceById(imageId);
+    const instance = await this.instanceService.findByPk(imageId);
     if (!instance) throw new ForbiddenException();
 
     instance.mainImage = !instance.mainImage;
@@ -91,10 +91,10 @@ export class ImagesService extends AppService {
   }
 
   async getProductImages(productId: number) {
-    return await this.instanceService.findInstances({ where: { productId } });
+    return await this.instanceService.findAll({ where: { productId } });
   }
 
   async getImage(imageId: number) {
-    return await this.instanceService.findInstanceById(imageId);
+    return await this.instanceService.findByPk(imageId);
   }
 }

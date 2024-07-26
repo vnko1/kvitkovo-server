@@ -1,50 +1,13 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/sequelize";
-import {
-  CreateOptions,
-  DestroyOptions,
-  FindOptions,
-  Optional,
-  UpdateOptions,
-} from "sequelize";
 
-import { AppService } from "src/common/services";
+import { InstanceService } from "src/common/services";
 
 import { Size } from "../../models";
 
 @Injectable()
-export class SizeService extends AppService {
-  constructor(@InjectModel(Size) private readonly model: typeof Size) {
-    super();
-  }
-
-  async createInstance<T extends Optional<any, string>>(
-    values: T,
-    opt?: CreateOptions
-  ) {
-    return this.model.create(values, opt);
-  }
-
-  async updateInstance<T extends Optional<any, string>>(
-    values: T,
-    opt?: UpdateOptions
-  ) {
-    return this.model.update(values, opt);
-  }
-
-  async deleteInstance(opt: DestroyOptions) {
-    return this.model.destroy(opt);
-  }
-
-  async findInstance(opt?: FindOptions) {
-    return this.model.findOne(opt);
-  }
-
-  async findInstanceById(pk: number, opt?: FindOptions) {
-    return this.model.findByPk(pk, opt);
-  }
-
-  async findInstances(opt?: FindOptions) {
-    return this.model.findAll(opt);
+export class SizeService extends InstanceService<Size> {
+  constructor(@InjectModel(Size) private readonly sizeModel: typeof Size) {
+    super(sizeModel);
   }
 }

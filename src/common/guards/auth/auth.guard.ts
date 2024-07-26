@@ -39,7 +39,7 @@ export class AuthGuard extends AppService implements CanActivate {
         secret: process.env.JWT_SECRET,
       });
 
-      const user = await this.userService.findUserByPK(
+      const user = await this.userService.findByPk(
         payload.sub,
         undefined,
         "adminScope"

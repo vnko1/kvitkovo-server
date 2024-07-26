@@ -2,10 +2,12 @@ import {
   AutoIncrement,
   Column,
   DataType,
+  HasMany,
   Model,
   PrimaryKey,
   Table,
 } from "sequelize-typescript";
+import { Decor } from "src/modules/decor";
 
 @Table
 export class Shop extends Model {
@@ -31,4 +33,7 @@ export class Shop extends Model {
 
   @Column({ type: DataType.STRING })
   address: string;
+
+  @HasMany(() => Decor)
+  decors: Decor[];
 }

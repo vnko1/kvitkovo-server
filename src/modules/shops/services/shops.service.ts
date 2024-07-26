@@ -10,11 +10,11 @@ export class ShopsService extends AppService {
   }
 
   async createInstance(createInstance: CreateShopDto) {
-    return await this.instanceService.createInstance(createInstance);
+    return await this.instanceService.add(createInstance);
   }
 
   async updateInstance(shopId: number, updateInstance: UpdateShopDto) {
-    const instance = await this.instanceService.findInstanceById(shopId);
+    const instance = await this.instanceService.findByPk(shopId);
 
     Object.keys(updateInstance).forEach(
       (data) => (instance[data] = updateInstance[data])
@@ -24,14 +24,14 @@ export class ShopsService extends AppService {
   }
 
   async deleteInstance(shopId: number) {
-    return await this.instanceService.deleteInstance({ where: { shopId } });
+    return await this.instanceService.delete({ where: { shopId } });
   }
 
   async getInstanceById(shopId: number) {
-    return await this.instanceService.findInstanceById(shopId);
+    return await this.instanceService.findByPk(shopId);
   }
 
   async getAllInstances() {
-    return await this.instanceService.findInstances();
+    return await this.instanceService.findAll();
   }
 }
