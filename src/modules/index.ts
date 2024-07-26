@@ -12,3 +12,4 @@ export { ProductTypesModule } from "./productTypes/productTypes.module";
 export { ProductsModule } from "./products/products.module";
 export { ShopModule } from "./shop/shop.module";
 export { ShopsModule } from "./shops/shops.module";
+export { DecorModule } from "./decor/decor.module";

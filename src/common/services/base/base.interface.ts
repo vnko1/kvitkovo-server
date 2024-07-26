@@ -1,0 +1,16 @@
+import { CreateOptions, UpdateOptions } from "sequelize";
+
+export interface BaseInterfaceModel<T> {
+  create(data: T, opt?: CreateOptions): Promise<T>;
+  update(data: T, opt?: UpdateOptions);
+  //   createMany(data: DeepPartial<T>[]): T[];
+  //   save(data: DeepPartial<T>): Promise<T>;
+  //   saveMany(data: DeepPartial<T>[]): Promise<T[]>;
+  //   findOneById(id: string): Promise<T>;
+  //   findByCondition(filterCondition: FindOneOptions<T>): Promise<T>;
+  //   findAll(options?: FindManyOptions<T>): Promise<T[]>;
+  //   remove(data: T): Promise<T>;
+  //   findWithRelations(relations: FindManyOptions<T>): Promise<T[]>;
+  //   preload(entityLike: DeepPartial<T>): Promise<T>;
+  //   findOne(options: FindOneOptions<T>): Promise<T>;
+}
