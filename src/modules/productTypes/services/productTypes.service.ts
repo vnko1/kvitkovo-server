@@ -12,11 +12,11 @@ export class ProductTypesService extends AppService {
   }
 
   async createInstance(createInstanceDto: CreateProductTypesDto) {
-    return await this.instanceService.createInstance(createInstanceDto);
+    return await this.instanceService.add(createInstanceDto);
   }
 
   async destroyInstance(productTypeId: number) {
-    return await this.instanceService.deleteInstance({
+    return await this.instanceService.delete({
       where: { productTypeId },
     });
   }
@@ -25,7 +25,7 @@ export class ProductTypesService extends AppService {
     productTypeId: number,
     updateInstanceDto: UpdateProductTypesDto
   ) {
-    const instance = await this.instanceService.findInstanceById(productTypeId);
+    const instance = await this.instanceService.findByPk(productTypeId);
     if (!instance) throw new ForbiddenException();
 
     Object.keys(updateInstanceDto).forEach(
@@ -36,10 +36,10 @@ export class ProductTypesService extends AppService {
   }
 
   async getInstance(productTypeId: number) {
-    return await this.instanceService.findInstanceById(productTypeId);
+    return await this.instanceService.findByPk(productTypeId);
   }
 
   async getAllInstances() {
-    return await this.instanceService.findInstances();
+    return await this.instanceService.findAll();
   }
 }

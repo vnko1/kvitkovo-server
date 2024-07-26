@@ -11,7 +11,7 @@ export class TaskSchedulerService {
 
   private async clearExpiredVerificationCode(): Promise<void> {
     const now = new Date();
-    await this.userService.updateUser(
+    await this.userService.edit(
       { verificationCode: null, verificationCodeExpiry: null },
       { where: { verificationCodeExpiry: { [Op.lt]: now } } }
     );
@@ -28,7 +28,7 @@ export class TaskSchedulerService {
 
     const expStamp = addMonths(currentDate, -12);
     try {
-      const users = await this.userService.getAllUsers({
+      const users = await this.userService.findAll({
         where: {
           deletedAt: {
             [Op.ne]: null,
@@ -38,7 +38,7 @@ export class TaskSchedulerService {
       });
       for (const user of users) {
         if (user.deletedAt < expStamp)
-          await this.userService.deleteUser({
+          await this.userService.delete({
             where: { userId: user.userId },
             force: true,
           });

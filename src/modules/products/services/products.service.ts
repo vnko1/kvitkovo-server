@@ -171,11 +171,11 @@ export class ProductsService extends AppService {
   }
 
   async createProduct(createInstanceDto: CreateProductDto) {
-    return await this.instanceService.createInstance(createInstanceDto);
+    return await this.instanceService.add(createInstanceDto);
   }
 
   async updateProduct(productId: number, updateInstanceDto: UpdateProductDto) {
-    const instance = await this.instanceService.findInstanceById(productId);
+    const instance = await this.instanceService.findByPk(productId);
 
     Object.keys(updateInstanceDto).forEach(
       (data) => (instance[data] = updateInstanceDto[data])
@@ -184,25 +184,25 @@ export class ProductsService extends AppService {
   }
 
   async toggleProductStatus(productId: number) {
-    const instance = await this.instanceService.findInstanceById(productId);
+    const instance = await this.instanceService.findByPk(productId);
     instance.available = !instance.available;
     return await instance.save();
   }
 
   async deleteProduct(productId: number) {
-    return await this.instanceService.deleteInstance({ where: { productId } });
+    return await this.instanceService.delete({ where: { productId } });
   }
 
   async getProduct(productId: number) {
-    return await this.instanceService.findInstanceById(productId);
+    return await this.instanceService.findByPk(productId);
   }
 
   async getAllProducts() {
-    return await this.instanceService.findInstances();
+    return await this.instanceService.findAll();
   }
 
   async getFilteredProducts(queryDto: QueryDto) {
-    return await this.instanceService.findAndCountInstances(
+    return await this.instanceService.findAndCountAll(
       this.getFilteredQueryOpt(queryDto)
     );
   }
@@ -210,7 +210,7 @@ export class ProductsService extends AppService {
   async getDiscountedProducts(
     queryDto: Pick<QueryDto, "limit" | "offset" | "sort">
   ) {
-    return await this.instanceService.findAndCountInstances(
+    return await this.instanceService.findAndCountAll(
       this.getDiscountedQuery(queryDto)
     );
   }
@@ -218,7 +218,7 @@ export class ProductsService extends AppService {
   async getProductsByCategory(
     queryDto: Pick<QueryDto, "limit" | "offset" | "sort" | "categoryId">
   ) {
-    return await this.instanceService.findAndCountInstances(
+    return await this.instanceService.findAndCountAll(
       this.getCategoryQuery(queryDto)
     );
   }

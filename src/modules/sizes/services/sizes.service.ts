@@ -12,15 +12,15 @@ export class SizesService extends AppService {
   }
 
   async createInstance(createInstanceDto: CreateSizeDto) {
-    return await this.instanceService.createInstance(createInstanceDto);
+    return await this.instanceService.add(createInstanceDto);
   }
 
   async destroyInstance(sizeId: number) {
-    return await this.instanceService.deleteInstance({ where: { sizeId } });
+    return await this.instanceService.delete({ where: { sizeId } });
   }
 
   async updateInstance(sizeId: number, updateInstanceDto: UpdateSizeDto) {
-    const instance = await this.instanceService.findInstanceById(sizeId);
+    const instance = await this.instanceService.findByPk(sizeId);
     if (!instance) throw new ForbiddenException();
 
     Object.keys(updateInstanceDto).forEach(
@@ -31,10 +31,10 @@ export class SizesService extends AppService {
   }
 
   async getInstance(sizeId: number) {
-    return await this.instanceService.findInstanceById(sizeId);
+    return await this.instanceService.findByPk(sizeId);
   }
 
   async getAllInstances() {
-    return await this.instanceService.findInstances();
+    return await this.instanceService.findAll();
   }
 }

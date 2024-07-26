@@ -3,10 +3,18 @@ import {
   DestroyOptions,
   FindAndCountOptions,
   FindOptions,
+  FindOrCreateOptions,
+  RestoreOptions,
   UpdateOptions,
 } from "sequelize";
+import { ScopeType } from "src/types";
 
 export interface InstanceInterface<T> {
+  findOrCreate(
+    opt: FindOrCreateOptions,
+    scope?: ScopeType
+  ): Promise<[T, boolean]>;
+
   add(data: any, opt?: CreateOptions): Promise<T>;
 
   edit<T extends object>(
@@ -16,13 +24,22 @@ export interface InstanceInterface<T> {
 
   delete(opt: DestroyOptions): Promise<number>;
 
-  findByPk<M extends string | number>(pk: M, opt?: FindOptions): Promise<T>;
+  restore(opt: RestoreOptions): Promise<void>;
 
-  findOne(opt?: FindOptions): Promise<T>;
+  findByPk<M extends string | number>(
+    pk: M,
+    opt?: FindOptions,
+    scope?: ScopeType
+  ): Promise<T>;
 
-  findAll(opt?: FindOptions): Promise<T[]>;
+  findOne(opt?: FindOptions, scope?: ScopeType): Promise<T>;
 
-  findAndCountAll(opt?: Omit<FindAndCountOptions<any>, "group">): Promise<{
+  findAll(opt?: FindOptions, scope?: ScopeType): Promise<T[]>;
+
+  findAndCountAll(
+    opt?: Omit<FindAndCountOptions<any>, "group">,
+    scope?: ScopeType
+  ): Promise<{
     rows: T[];
     count: number;
   }>;

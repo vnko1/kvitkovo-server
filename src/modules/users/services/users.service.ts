@@ -30,7 +30,7 @@ export class UsersService extends AppService {
   }
 
   async getUser(userId: number, roles: RolesEnum) {
-    const user = await this.userService.findUserByPK(
+    const user = await this.userService.findByPk(
       userId,
       { paranoid: roles === RolesEnum.USER },
       this.getUserScopeByRole(roles)
@@ -43,7 +43,7 @@ export class UsersService extends AppService {
   }
 
   async deleteUser(userId: number, force = false) {
-    return this.userService.deleteUser({ where: { userId }, force });
+    return this.userService.delete({ where: { userId }, force });
   }
 
   async findUsers(
@@ -52,7 +52,7 @@ export class UsersService extends AppService {
     limit: number,
     roles: RolesEnum
   ) {
-    return this.userService.findAndCountData(
+    return this.userService.findAndCountAll(
       {
         where: { roles: searchRoles },
         offset,
@@ -64,7 +64,7 @@ export class UsersService extends AppService {
   }
 
   async createUser(createUserDto: CreateUserDto) {
-    const newUser = await this.userService.createUser(createUserDto);
+    const newUser = await this.userService.add(createUserDto);
 
     const tempPass = this.genTempPass();
     newUser.password = tempPass;
@@ -76,7 +76,7 @@ export class UsersService extends AppService {
   }
 
   async resetPass(email: string) {
-    const user = await this.userService.findUser({ where: { email } });
+    const user = await this.userService.findOne({ where: { email } });
     if (!user) throw new ForbiddenException();
 
     user.setVerificationCode(randomUUID());
@@ -90,7 +90,7 @@ export class UsersService extends AppService {
   }
 
   async changeResetPassword(changeResetPasswordDto: ChangeResetPasswordDto) {
-    const user = await this.userService.findUser({
+    const user = await this.userService.findOne({
       where: { verificationCode: changeResetPasswordDto.verificationCode },
     });
     if (!user) throw new ForbiddenException();
@@ -101,7 +101,7 @@ export class UsersService extends AppService {
   }
 
   async changePassword(userId: number, changePassword: ChangePasswordDto) {
-    const user = await this.userService.findUserByPK(userId);
+    const user = await this.userService.findByPk(userId);
     if (!user) throw new ForbiddenException();
     user.password = changePassword.password;
     return await user.save();
@@ -113,7 +113,7 @@ export class UsersService extends AppService {
     roles: RolesEnum,
     onlyEmployees?: boolean
   ) {
-    const user = await this.userService.findUserByPK(
+    const user = await this.userService.findByPk(
       userId,
       { paranoid: roles === RolesEnum.USER },
       this.getUserScopeByRole(roles)
@@ -131,7 +131,7 @@ export class UsersService extends AppService {
   }
 
   async toggleUserStatus(userId: number, status: StatusEnum, roles: RolesEnum) {
-    const user = await this.userService.findUserByPK(userId);
+    const user = await this.userService.findByPk(userId);
     if (!user) throw new ForbiddenException();
 
     if (roles === RolesEnum.MANAGER && user.roles !== RolesEnum.USER)

@@ -12,18 +12,18 @@ export class CategoriesService extends AppService {
   }
 
   async createInstance(createInstanceDto: CreateCategoryDto) {
-    return await this.instanceService.createInstance(createInstanceDto);
+    return await this.instanceService.add(createInstanceDto);
   }
 
   async destroyInstance(categoryId: number) {
-    return await this.instanceService.deleteInstance({ where: { categoryId } });
+    return await this.instanceService.delete({ where: { categoryId } });
   }
 
   async updateInstance(
     categoryId: number,
     updateInstanceDto: UpdateCategoryDto
   ) {
-    const instance = await this.instanceService.findInstanceById(categoryId);
+    const instance = await this.instanceService.findByPk(categoryId);
     if (!instance) throw new ForbiddenException();
 
     Object.keys(updateInstanceDto).forEach(
@@ -34,10 +34,10 @@ export class CategoriesService extends AppService {
   }
 
   async getInstance(categoryId: number) {
-    return await this.instanceService.findInstanceById(categoryId);
+    return await this.instanceService.findByPk(categoryId);
   }
 
   async getAllInstances() {
-    return await this.instanceService.findInstances();
+    return await this.instanceService.findAll();
   }
 }

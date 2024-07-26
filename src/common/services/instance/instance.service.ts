@@ -6,7 +6,11 @@ import {
   DestroyOptions,
   FindOptions,
   FindAndCountOptions,
+  FindOrCreateOptions,
+  RestoreOptions,
 } from "sequelize";
+
+import { ScopeType } from "src/types";
 
 import { AppService } from "../app/app.service";
 
@@ -18,6 +22,14 @@ export abstract class InstanceService<TModel extends Model>
 {
   constructor(private readonly model: ModelStatic<TModel>) {
     super();
+  }
+
+  findOrCreate(
+    opt: FindOrCreateOptions,
+    scope?: ScopeType
+  ): Promise<[TModel, boolean]> {
+    if (scope) return this.model.scope(scope).findOrCreate(opt);
+    return this.model.findOrCreate(opt);
   }
 
   add(data: any, opt?: CreateOptions): Promise<TModel> {
@@ -35,24 +47,34 @@ export abstract class InstanceService<TModel extends Model>
     return this.model.destroy(opt);
   }
 
+  restore(opt: RestoreOptions): Promise<void> {
+    return this.model.restore(opt);
+  }
+
   findByPk<M extends string | number>(
     pk: M,
-    opt?: FindOptions
+    opt?: FindOptions,
+    scope?: ScopeType
   ): Promise<TModel> {
+    if (scope) return this.model.scope(scope).findByPk(pk, opt);
     return this.model.findByPk(pk, opt);
   }
 
-  findOne(opt?: FindOptions): Promise<TModel> {
+  findOne(opt?: FindOptions, scope?: ScopeType): Promise<TModel> {
+    if (scope) return this.model.scope(scope).findOne(opt);
     return this.model.findOne(opt);
   }
 
-  findAll(opt?: FindOptions): Promise<TModel[]> {
+  findAll(opt?: FindOptions, scope?: ScopeType): Promise<TModel[]> {
+    if (scope) return this.model.scope(scope).findAll(opt);
     return this.model.findAll(opt);
   }
 
   findAndCountAll(
-    opt?: Omit<FindAndCountOptions<any>, "group">
+    opt?: Omit<FindAndCountOptions<any>, "group">,
+    scope?: ScopeType
   ): Promise<{ rows: TModel[]; count: number }> {
+    if (scope) return this.model.scope(scope).findAndCountAll(opt);
     return this.model.findAndCountAll(opt);
   }
 }
