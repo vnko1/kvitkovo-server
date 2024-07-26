@@ -14,6 +14,11 @@ import {
 import { Shop } from "./modules/shop";
 import { Decor } from "./modules/decor";
 import {
+  AnswerFeedbackMessageFile,
+  AnswerMessage,
+  FeedbackMessage,
+} from "./modules/feedback";
+import {
   CloudsModule,
   TasksModule,
   MailModule,
@@ -29,6 +34,7 @@ import {
   ShopModule,
   ShopsModule,
   DecorModule,
+  FeedbackModule,
 } from "./modules";
 
 @Module({
@@ -55,6 +61,9 @@ import {
           Image,
           Shop,
           Decor,
+          AnswerFeedbackMessageFile,
+          AnswerMessage,
+          FeedbackMessage,
         ],
       }),
     }),
@@ -73,6 +82,7 @@ import {
     ShopModule,
     ShopsModule,
     DecorModule,
+    FeedbackModule,
   ],
 })
 export class AppModule {}

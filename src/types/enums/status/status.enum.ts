@@ -10,3 +10,12 @@ export enum DecorStatusEnum {
   DONE = "done",
   CANCELED = "canceled",
 }
+
+export enum MessageStatusEnum {
+  NEW = "new",
+  CLOSED = "closed",
+}
+export enum MessageTypeEnum {
+  PHONE = "phone",
+  EMAIL = "email",
+}
