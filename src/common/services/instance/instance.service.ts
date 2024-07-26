@@ -16,7 +16,7 @@ export abstract class InstanceService<TModel extends Model>
   extends AppService
   implements InstanceInterface<TModel>
 {
-  constructor(protected readonly model: ModelStatic<TModel>) {
+  constructor(private readonly model: ModelStatic<TModel>) {
     super();
   }
 

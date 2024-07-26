@@ -6,7 +6,7 @@ import { Decor } from "../models";
 
 @Injectable()
 export class DecorService extends InstanceService<Decor> {
-  constructor(@InjectModel(Decor) protected readonly model: typeof Decor) {
-    super(model);
+  constructor(@InjectModel(Decor) private readonly decorModel: typeof Decor) {
+    super(decorModel);
   }
 }
