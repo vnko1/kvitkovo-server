@@ -10,11 +10,8 @@ import {
 import { AppService } from "../app/app.service";
 
 export abstract class BaseAbstractService<T extends Model> extends AppService {
-  protected model: ModelStatic<T>;
-
-  constructor(model: ModelStatic<T>) {
+  constructor(protected readonly model: ModelStatic<T>) {
     super();
-    this.model = model;
   }
 
   async createInstance(values: any, opt?: CreateOptions) {
