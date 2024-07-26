@@ -35,6 +35,6 @@ export class Image extends Model {
   @Column
   productId: number;
 
-  @BelongsTo(() => Product, { onDelete: "CASCADE", onUpdate: "CASCADE" })
+  @BelongsTo(() => Product)
   product: Product;
 }

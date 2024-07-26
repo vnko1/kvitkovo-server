@@ -7,6 +7,7 @@ import {
   DataType,
   Default,
   DefaultScope,
+  HasMany,
   Model,
   PrimaryKey,
   Scopes,
@@ -16,6 +17,7 @@ import {
 import * as bcrypt from "bcrypt";
 
 import { ProviderEnum, RolesEnum, StatusEnum } from "src/types";
+import { Decor } from "src/modules/decor";
 
 const defaultAttribute = [
   "userId",
@@ -134,6 +136,12 @@ export class User extends Model {
   @AllowNull
   @Column({ type: DataType.DATE })
   verificationCodeExpiry: Date | null;
+
+  @HasMany(() => Decor, { as: "manger" })
+  mangerDecors: Decor[];
+
+  @HasMany(() => Decor, { as: "customer" })
+  customerDecors: Decor[];
 
   public setVerificationCode(code: string) {
     this.verificationCode = code;

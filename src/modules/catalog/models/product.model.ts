@@ -77,28 +77,28 @@ export class Product extends Model {
   @Column
   categoryId: number;
 
-  @BelongsTo(() => Category, { onDelete: "CASCADE", onUpdate: "CASCADE" })
+  @BelongsTo(() => Category)
   category: Category;
 
   @ForeignKey(() => Color)
   @Column
   colorId: number;
 
-  @BelongsTo(() => Color, { onDelete: "CASCADE", onUpdate: "CASCADE" })
+  @BelongsTo(() => Color)
   color: Color;
 
   @ForeignKey(() => Size)
   @Column
   sizeId: number;
 
-  @BelongsTo(() => Size, { onDelete: "CASCADE", onUpdate: "CASCADE" })
+  @BelongsTo(() => Size)
   size: Size;
 
   @ForeignKey(() => ProductType)
   @Column
   productTypeId: number;
 
-  @BelongsTo(() => ProductType, { onDelete: "SCASCADE", onUpdate: "CASCADE" })
+  @BelongsTo(() => ProductType)
   productType: ProductType;
 
   @HasMany(() => Image, { onDelete: "CASCADE", onUpdate: "CASCADE" })

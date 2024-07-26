@@ -12,6 +12,7 @@ import {
   Image,
 } from "./modules/catalog";
 import { Shop } from "./modules/shop";
+import { Decor } from "./modules/decor";
 import {
   CloudsModule,
   TasksModule,
@@ -53,6 +54,7 @@ import {
           ProductType,
           Image,
           Shop,
+          Decor,
         ],
       }),
     }),

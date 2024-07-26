@@ -62,7 +62,7 @@ export class Category extends Model {
   })
   sortValue: number;
 
-  @HasMany(() => Product, { onDelete: "CASCADE", onUpdate: "CASCADE" })
+  @HasMany(() => Product)
   products: Product[];
 
   @ForeignKey(() => Category)
