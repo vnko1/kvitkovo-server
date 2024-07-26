@@ -12,15 +12,15 @@ export class ColorsService extends AppService {
   }
 
   async createInstance(createInstanceDto: CreateColorDto) {
-    return await this.instanceService.createInstance(createInstanceDto);
+    return await this.instanceService.add(createInstanceDto);
   }
 
   async destroyInstance(colorId: number) {
-    return await this.instanceService.deleteInstance({ where: { colorId } });
+    return await this.instanceService.delete({ where: { colorId } });
   }
 
   async updateInstance(colorId: number, updateInstanceDto: UpdateColorDto) {
-    const instance = await this.instanceService.findInstanceById(colorId);
+    const instance = await this.instanceService.findByPk(colorId);
     if (!instance) throw new ForbiddenException();
 
     Object.keys(updateInstanceDto).forEach(
@@ -31,14 +31,14 @@ export class ColorsService extends AppService {
   }
 
   async getInstance(colorId: number) {
-    return await this.instanceService.findInstanceById(colorId);
+    return await this.instanceService.findByPk(colorId);
   }
 
   async getAllInstances() {
-    return await this.instanceService.findInstances();
+    return await this.instanceService.findAll();
   }
 
   async getInstanceByName(name: string) {
-    return this.instanceService.findInstance({ where: { name } });
+    return this.instanceService.findOne({ where: { name } });
   }
 }
