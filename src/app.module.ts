@@ -35,6 +35,7 @@ import {
   ShopsModule,
   DecorModule,
   FeedbackModule,
+  OrderModule,
 } from "./modules";
 
 @Module({
@@ -83,6 +84,7 @@ import {
     ShopsModule,
     DecorModule,
     FeedbackModule,
+    OrderModule,
   ],
 })
 export class AppModule {}

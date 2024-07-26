@@ -3,7 +3,7 @@ export enum StatusEnum {
   INACTIVE = "inactive",
 }
 
-export enum DecorStatusEnum {
+export enum OrderStatusEnum {
   NEW = "new",
   ACCEPTED = "accepted",
   DELIVERED = "delivered",
@@ -18,4 +18,14 @@ export enum MessageStatusEnum {
 export enum MessageTypeEnum {
   PHONE = "phone",
   EMAIL = "email",
+}
+
+export enum DeliveryStatusEnum {
+  PICKUP = "pickup",
+  COURIER = "courier",
+}
+
+export enum PayTypesEnum {
+  PAYMENT_UPON_RECEIPT = "receipt",
+  CARD = "card",
 }

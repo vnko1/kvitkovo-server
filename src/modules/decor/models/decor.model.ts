@@ -9,7 +9,7 @@ import {
   Table,
 } from "sequelize-typescript";
 
-import { DecorStatusEnum } from "src/types";
+import { OrderStatusEnum } from "src/types";
 
 import { Shop } from "src/modules/shop";
 import { User } from "src/modules/user";
@@ -26,14 +26,14 @@ export class Decor extends Model {
 
   @Column({
     type: DataType.ENUM(
-      DecorStatusEnum.ACCEPTED,
-      DecorStatusEnum.CANCELED,
-      DecorStatusEnum.DELIVERED,
-      DecorStatusEnum.DONE,
-      DecorStatusEnum.NEW
+      OrderStatusEnum.ACCEPTED,
+      OrderStatusEnum.CANCELED,
+      OrderStatusEnum.DELIVERED,
+      OrderStatusEnum.DONE,
+      OrderStatusEnum.NEW
     ),
   })
-  status: DecorStatusEnum;
+  status: OrderStatusEnum;
 
   @Column({ type: DataType.STRING })
   customerName: string;
